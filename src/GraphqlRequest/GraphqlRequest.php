@@ -1,6 +1,6 @@
 <?php
 
-namespace GraphqlRequest;
+namespace GraphqlClient\GraphqlRequest;
 
 use GraphQL\Client;
 use GraphQL\RawObject;
