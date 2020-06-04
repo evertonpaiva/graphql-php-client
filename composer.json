@@ -1,0 +1,17 @@
+{
+    "name": "micro/graphql-client",
+    "description": "Cliente GraphQL para realizar requisições para a API GraphQL da UFVJM.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Divisão de Desenvolvimento de Sistemas",
+            "email": "devsis@ufvjm.edu.br"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.6.4",
+        "gmostafa/php-graphql-client": "^1.4"
+    }
+}
