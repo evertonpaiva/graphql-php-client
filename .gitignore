@@ -1,2 +1,3 @@
 # Ignorando pasta do editor PHPStorm
 .idea
+vendor/
