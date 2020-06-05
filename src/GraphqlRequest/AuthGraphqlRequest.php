@@ -51,12 +51,14 @@ class AuthGraphqlRequest extends GraphqlRequest
      */
     public function usuarioLogadoInfo()
     {
+        $this->checkHeaders();
+
         $gql = (
-            new Query('me'))
+        new Query('me'))
             ->setSelectionSet(
                 [
                     (
-                        new Query('vinculos'))
+                    new Query('vinculos'))
                         ->setSelectionSet(
                             [
                                 'tipoVinculo',
