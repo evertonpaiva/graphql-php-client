@@ -1,15 +1,18 @@
-# UFVJM - Client GraphQL
+# Client GraphQL - UFVJM
 
 Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
 
 ## Sumário
 
-* [UFVJM - Client GraphQL](#ufvjm---client-graphql)
+* [Client GraphQL - UFVJM](#client-graphql---ufvjm)
   * [Sumário](#sumário)
   * [Utilização da biblioteca](#utilização-da-biblioteca)
+     * [Adicionar biblioteca como dependência](#adicionar-biblioteca-como-dependência)
      * [Definir variáveis de ambiente](#definir-variáveis-de-ambiente)
         * [Client Id e Client Key da Aplicação](#client-id-e-client-key-da-aplicação)
   * [Contribuindo para a biblioteca](#contribuindo-para-a-biblioteca)
+     * [Repositório](#repositório)
+     * [Ferramentas de lint](#ferramentas-de-lint)
   * [Documentação](#documentação)
   * [Equipe Responsável](#equipe-responsável)
   * [Parceiros](#parceiros)
@@ -61,6 +64,12 @@ GRAPHQL_URL=https://micro-teste.dds.ufvjm.edu.br/
 Após alterações no arquivo **.env**, o container web deve ser reiniciado para recarregar as alterações:
 
 ## Contribuindo para a biblioteca
+
+### Repositório
+
+O desenvolvimento é realizado na branch `dev`. Os mantenedores do respoitório levam as alterações aprovadas para a branch `master`.
+
+### Ferramentas de lint
 
 Construindo a imagem
 
