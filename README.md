@@ -1,5 +1,7 @@
 # UFVJM - Client GraphQL
 
+Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
+
 ## Sumário
 
 * [UFVJM - Client GraphQL](#ufvjm---client-graphql)
@@ -13,6 +15,29 @@
   * [Parceiros](#parceiros)
 
 ## Utilização da biblioteca
+
+### Adicionar biblioteca como dependência
+
+No arquivo `composer.json` do seu projeto, adicione os seguintes itens:
+
+Na entrada `repositories`
+
+```json
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://git.dds.ufvjm.edu.br/micro/graphql-client.git"
+        }
+    ],
+```
+
+Na entrada `require`
+
+```json
+    "require": {
+        "micro/graphql-client": "dev-dev",
+    },
+```
 
 ### Definir variáveis de ambiente
 
