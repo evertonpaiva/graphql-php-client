@@ -46,9 +46,11 @@ class AuthGraphqlRequest extends GraphqlRequest
     }
 
     /**
+     * Retorna as informações do usuário logado
      * @return array Vetor com informações do usuário logado
      */
-    public function me(){
+    public function usuarioLogadoInfo()
+    {
         $gql = (
             new Query('me'))
             ->setSelectionSet(
@@ -60,11 +62,11 @@ class AuthGraphqlRequest extends GraphqlRequest
                                 'tipoVinculo',
                                 'listaVinculos'
                             ]
-                    ),
+                        ),
                     'nome',
                     'cpf'
                 ]
-        );
+            );
 
         $results = $this->client->runQuery($gql);
         return $results->getResults()->data->me;
