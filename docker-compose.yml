@@ -1,0 +1,11 @@
+version: '2.2'
+services:
+  graphql-client:
+    image: graphql-client:dev
+    container_name: graphql-client
+    restart: always
+    volumes:
+      - ./:/app
+    build:
+      context: .
+      dockerfile: Dockerfile
