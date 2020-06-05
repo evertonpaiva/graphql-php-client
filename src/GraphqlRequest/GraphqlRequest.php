@@ -4,6 +4,7 @@ namespace GraphqlClient\GraphqlRequest;
 
 use GraphQL\Client;
 use GraphQL\RawObject;
+use Error;
 
 /**
  * Controle de requisições HTTP de consultas GraphQL
@@ -30,21 +31,22 @@ class GraphqlRequest
 
     /**
      * GraphqlRequest constructor.
+     * @param null $headers Objeto com token de aplicação e token de usuário
      */
     public function __construct($headers = null)
     {
-        $this->appId = getenv('GRAPHQL_APP_ID');
-        $this->appKey = getenv('GRAPHQL_APP_KEY');
+        $this->appId = $this->getEnvValue('GRAPHQL_APP_ID');
+        $this->appKey = $this->getEnvValue('GRAPHQL_APP_KEY');
 
-        $GRAPHQL_URL = getenv('GRAPHQL_URL');
+        $graphlUrl = $this->getEnvValue('GRAPHQL_URL');
 
         // Caso os cabeçalhos tenham sido enviados, contruindo o cliente GraphQL com as informações de cabeçalho
-        if(is_object($headers)
-            && property_exists($headers,'Application')
+        if (is_object($headers)
+            && property_exists($headers, 'Application')
             && property_exists($headers, 'Authorization')
-        ){
+        ) {
             $this->client = new Client(
-                $GRAPHQL_URL,
+                $graphlUrl,
                 [
                     'Application' => $headers->Application,
                     'Authorization' => $headers->Authorization
@@ -52,7 +54,7 @@ class GraphqlRequest
             );
         } else {
             $this->client = new Client(
-                $GRAPHQL_URL
+                $graphlUrl
             );
         }
     }
@@ -62,7 +64,8 @@ class GraphqlRequest
      *
      * @return RawObject Entrada na controle de aplicações
      */
-    protected function generateAppInput(){
+    protected function generateAppInput()
+    {
         return new RawObject("{ appId: \"{$this->appId}\" appKey: \"{$this->appKey}\" }");
     }
 
@@ -73,7 +76,21 @@ class GraphqlRequest
      * @param String $password Senha do usuário
      * @return RawObject Entrada para controle de usuários
      */
-    protected function generateUserInput(String $login, String $password){
+    protected function generateUserInput(String $login, String $password)
+    {
         return new RawObject("{ login: \"${login}\" password: \"${password}\" }");
+    }
+
+    /**
+     * Busca o valor da variável definida como variável de ambiente
+     * @param $envName Nome da variável de ambiente
+     * @return array|false|string
+     */
+    private function getEnvValue($envName)
+    {
+        if (!getenv($envName)) {
+            throw new Error('Variável de ambiente '.$envName.' não definida');
+        }
+        return getenv($envName);
     }
 }
