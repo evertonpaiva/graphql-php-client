@@ -243,17 +243,17 @@ class GraphqlRequest
     {
         $this->startSession();
 
-        $this->headers = \stdClass();
+        $this->headers = new stdClass();
 
         if (!is_null(Session::get(self::SESSION_APP_HEADER_NAME))) {
             $appHeader = Session::get(self::SESSION_APP_HEADER_NAME);
-            $this->checkAppToken($appHeader, self::APP_HEADER_NAME);
+            $this->checkToken($appHeader, self::APP_HEADER_NAME);
             $this->headers->{self::APP_HEADER_NAME} = $appHeader;
         }
 
         if (!is_null(Session::get(self::SESSION_USER_HEADER_NAME))) {
             $userHeader = Session::get(self::SESSION_USER_HEADER_NAME);
-            $this->checkUserToken($userHeader, self::USER_HEADER_NAME);
+            $this->checkToken($userHeader, self::USER_HEADER_NAME);
             $this->headers->{self::USER_HEADER_NAME} = $userHeader;
         }
     }
