@@ -8,7 +8,8 @@ namespace GraphqlClient\Exception;
  *
  * @package GraphqlClient\Exception
  */
-class DecodeTokenException extends \Exception {
+class DecodeTokenException extends \Exception
+{
     public function __construct($tokenType, $errorMessage)
     {
         $message = 'Não foi possível decodificar o token '.$tokenType.' Mensagem: '.$errorMessage;

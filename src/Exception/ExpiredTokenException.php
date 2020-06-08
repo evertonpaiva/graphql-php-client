@@ -8,7 +8,8 @@ namespace GraphqlClient\Exception;
  *
  * @package GraphqlClient\Exception
  */
-class ExpiredTokenException extends \Exception {
+class ExpiredTokenException extends \Exception
+{
     public function __construct($tokenType)
     {
         $message = 'O token '.$tokenType.' já está expirado. Efetue login novamente';

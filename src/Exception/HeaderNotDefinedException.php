@@ -8,7 +8,8 @@ namespace GraphqlClient\Exception;
  *
  * @package GraphqlClient\Exception
  */
-class HeaderNotDefinedException extends \Exception {
+class HeaderNotDefinedException extends \Exception
+{
     /**
      * Mensagem de erro para cabeçalho não fornecido
      */

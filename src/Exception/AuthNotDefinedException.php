@@ -9,7 +9,8 @@ namespace GraphqlClient\Exception;
  *
  * @package GraphqlClient\Exception
  */
-class AuthNotDefinedException extends \Exception {
+class AuthNotDefinedException extends \Exception
+{
     public function __construct()
     {
         $message = 'Defina o tipo de autenticação para sua requisição graphql.';
