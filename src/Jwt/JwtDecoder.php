@@ -122,7 +122,7 @@ EOD;
         // Pedindo para renovar o token 15 min (15 min x 60 segundos) antes de expirar
         $epoch = $decoded->exp - (15 * 60);
         $exp = new DateTime("@$epoch");
-        $now = new DateTime(now());
+        $now = new DateTime(date("Y-m-d H:i:s"));
 
         return ($now > $exp);
     }
@@ -135,7 +135,7 @@ EOD;
     private function checkTokenExpirado($decoded)
     {
         $exp = new DateTime("@$decoded->exp");
-        $now = new DateTime(now());
+        $now = new DateTime(date("Y-m-d H:i:s"));
 
         if ($now > $exp) {
             throw new ExpiredTokenException($this->type);
