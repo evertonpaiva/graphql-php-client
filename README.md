@@ -83,11 +83,13 @@ Após alterações no arquivo **.env**, o container web deve ser reiniciado para
 
 ### Integrando a autenticação
 
-No início do arquivo
+No início do arquivo:
 
 ```php
 use GraphqlClient\GraphqlRequest\AuthGraphqlRequest;
 ```
+
+Na função de autenticaçao:
 
 ```php
 //recupera os dados do formulario
