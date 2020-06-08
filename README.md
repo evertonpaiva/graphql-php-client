@@ -7,9 +7,12 @@ Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
 * [Client GraphQL - UFVJM](#client-graphql---ufvjm)
   * [Sumário](#sumário)
   * [Utilização da biblioteca](#utilização-da-biblioteca)
+     * [Pré-requisitos](#pré-requisitos)
      * [Adicionar biblioteca como dependência](#adicionar-biblioteca-como-dependência)
      * [Definir variáveis de ambiente](#definir-variáveis-de-ambiente)
         * [Client Id e Client Key da Aplicação](#client-id-e-client-key-da-aplicação)
+        * [Nome do ambiente](#nome-do-ambiente)
+     * [Integrando a autenticação](#integrando-a-autenticação)
   * [Contribuindo para a biblioteca](#contribuindo-para-a-biblioteca)
      * [Repositório](#repositório)
      * [Ferramentas de lint](#ferramentas-de-lint)
@@ -18,6 +21,11 @@ Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
   * [Parceiros](#parceiros)
 
 ## Utilização da biblioteca
+
+### Pré-requisitos
+
+* PHP 7.0 ou superior
+* [Composer](https://getcomposer.org/) instalado e configurado
 
 ### Adicionar biblioteca como dependência
 
@@ -38,7 +46,7 @@ Na entrada `require`
 
 ```json
     "require": {
-        "micro/graphql-client": "dev-dev",
+        "micro/graphql-client": "dev-master",
     },
 ```
 
@@ -55,13 +63,65 @@ GRAPHQL_APP_ID=
 GRAPHQL_APP_KEY=
 ```
 
+#### Nome do ambiente
+
+Define se o seu sistema apontará para o ambiente de `testes` ou de `produção` (sistema oficial da UFVJM).
+
 * Ambiente de Testes:
 
 ```
-GRAPHQL_URL=https://micro-teste.dds.ufvjm.edu.br/
+GRAPHQL_ENVNAME=teste
+```
+
+* Ambiente de Produção:
+
+```
+AINDA NÃO DISPONIBILIZADO
 ```
 
 Após alterações no arquivo **.env**, o container web deve ser reiniciado para recarregar as alterações:
+
+### Integrando a autenticação
+
+No início do arquivo
+
+```php
+use GraphqlClient\GraphqlRequest\AuthGraphqlRequest;
+```
+
+```php
+//recupera os dados do formulario
+$containstitucional = 'nome.sobrenome';
+$senha = 'sua-senha';
+
+try {
+    $request = new stdClass();
+
+    if(is_null($containstitucional) or is_null($senha)){
+        throw new \Exception('Usuário ou senha não informados');
+    }
+
+    $request->containstitucional = $containstitucional;
+    $request->password = $senha;
+
+    // Carrega a classe de autenticação
+    $authGraphqlRequest = new AuthGraphqlRequest();
+
+    // Tenta realizar o login na Conta Institucional
+    $authGraphqlRequest->loginContaInstitucional($request);
+
+    // Recupera as informações do usuário logado
+    // Dados pessoais e vinculos (aluno, docente, tae, coordenador de curso, etc) com a UFVJM
+    $userInfo = $authGraphqlRequest->usuarioLogadoInfo();
+
+    // Neste ponto, a autenticação funcionou, carrega o usuário de banco de dados
+    // proprietário da conta institucuinal ($containstitucional) utilizada na autenticação
+} catch (\Exception $e) {
+    $errorMessage = $e->getMessage();
+    // A mensagem de erro foi carregada, trata para disponibilizar na interface
+}
+
+```
 
 ## Contribuindo para a biblioteca
 
