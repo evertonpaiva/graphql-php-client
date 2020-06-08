@@ -116,11 +116,12 @@ try {
     // Dados pessoais e vinculos (aluno, docente, tae, coordenador de curso, etc) com a UFVJM
     $userInfo = $authGraphqlRequest->usuarioLogadoInfo();
 
-    // Neste ponto, a autenticação funcionou, carrega o usuário de banco de dados
-    // proprietário da conta institucuinal ($containstitucional) utilizada na autenticação
+    // Neste ponto, a autenticação funcionou, implementar o carregamento do usuário de banco de dados
+    // proprietário da conta institucuinal ($containstitucional) utilizada na autenticação, a senha já foi validada.
+    // Realize o login do usuário no seu framework para que a sessão armazene o usuário logado.
 } catch (\Exception $e) {
     $errorMessage = $e->getMessage();
-    // A mensagem de erro foi carregada, trata para disponibilizar na interface
+    // A mensagem de erro foi carregada, tratar para disponibilizar na interface para o usuário do sistema
 }
 
 ```
