@@ -3,6 +3,8 @@
 namespace GraphqlClient\Jwt;
 
 use Firebase\JWT\JWT;
+use GraphqlClient\Exception\ExpiredTokenException;
+use DateTime;
 
 /**
  * Class JwtDecoder
@@ -100,6 +102,43 @@ EOD;
 
         $decoded = JWT::decode($this->jwt, $pubKey, array('RS256'));
 
+        $decoded->expiraEm = new DateTime("@$decoded->exp");
+        $this->checkTokenExpirado($decoded);
+        $decoded->proximoExpirar = $this->proximoExpirar($decoded);
+
         return $decoded;
+    }
+
+    /**
+     * Calcula se já está próximo da expiração da validade do token
+     * Pega o tempo de expiração, e subtrai X minutos antes, pra avisar que o token está próximo de expirar
+     * @param $decoded
+     * @return bool
+     * @throws \Exception
+     */
+    private function proximoExpirar($decoded)
+    {
+        // Calculando quantos segundos antes de expirar é pra indicar necessidade de renovação
+        // Pedindo para renovar o token 15 min (15 min x 60 segundos) antes de expirar
+        $epoch = $decoded->exp - (15 * 60);
+        $exp = new DateTime("@$epoch");
+        $now = new DateTime(now());
+
+        return ($now > $exp);
+    }
+
+    /**
+     * Testa se o token já está expirado
+     * @param $decoded
+     * @throws \Exception
+     */
+    private function checkTokenExpirado($decoded)
+    {
+        $exp = new DateTime("@$decoded->exp");
+        $now = new DateTime(now());
+
+        if ($now > $exp) {
+            throw new ExpiredTokenException($this->type);
+        }
     }
 }
