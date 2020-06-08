@@ -4,10 +4,11 @@ namespace GraphqlClient\GraphqlRequest;
 
 use GraphQL\Client;
 use GraphQL\RawObject;
+use GraphqlClient\Exception\AuthNotDefinedException;
+use GraphqlClient\Exception\DecodeTokenException;
+use GraphqlClient\Exception\HeaderNotDefinedException;
 use GraphqlClient\Jwt\JwtDecoder;
 use GraphqlClient\Session\Session;
-use Error;
-use Exception;
 use stdClass;
 
 /**
@@ -62,11 +63,6 @@ class GraphqlRequest
      * Nome do cabeçalho de Usuário na sessão
      */
     const SESSION_USER_HEADER_NAME = 'GRAPHQL_AUTHORIZATION';
-
-    /**
-     * Mensagem de erro para cabeçalho não fornecido
-     */
-    const MSG_EMPTY_HEADER = 'Recupere o cabeçalho da sessão e passe-o ao construtor.';
 
     /**
      * @var string Id da aplicação no controle de microsserviços
@@ -157,7 +153,7 @@ class GraphqlRequest
     protected function checkAppHeader()
     {
         if (is_null($this->headers) || !property_exists($this->headers, self::APP_HEADER_NAME)) {
-            throw \Exception('Cabeçalho de Aplicação não definido. '.self::MSG_EMPTY_HEADER);
+            throw new HeaderNotDefinedException(self::APP_HEADER_NAME);
         }
     }
 
@@ -168,7 +164,7 @@ class GraphqlRequest
     protected function checkUserHeader()
     {
         if (is_null($this->headers) || !property_exists($this->headers, self::USER_HEADER_NAME)) {
-            throw \Exception('Cabeçalho de Usuário não definido. '.self::MSG_EMPTY_HEADER);
+            throw new HeaderNotDefinedException(self::USER_HEADER_NAME);
         }
     }
 
@@ -186,18 +182,27 @@ class GraphqlRequest
      * Checha se um token é válido
      * @param $header
      * @param $type
+     * @param bool $canRenew
      */
-    private function checkToken($header, $type)
+    private function checkToken($header, $type, $canRenew)
     {
         $token = explode(' ', $header)[1];
-        $jwt = new JwtDecoder($token, $this->graphqlEnv, $type);
         try {
-            $jwt->decode();
-            //dd($decoded);
-            //TO-DO @calcular se o token está expirado
+            $jwt = new JwtDecoder($token, $this->graphqlEnv, $type);
+            $decoded = $jwt->decode();
+            // Token está proximo de expirar
+            // Renovando o token
+            if ($decoded->proximoExpirar && $canRenew) {
+                if ($type === self::APP_HEADER_NAME) {
+                    $this->renewApp();
+                } else {
+                    $this->renewUser();
+                }
+            }
+            return $decoded;
         } catch (\Exception $e) {
             $errorMessage = $e->getMessage();
-            throw \Exception('Não foi possível decodificar o token '.$type.' Mensagem: '.$errorMessage);
+            throw new DecodeTokenException($type, $errorMessage);
         }
     }
 
@@ -221,40 +226,56 @@ class GraphqlRequest
         Session::startSession();
     }
 
+    private function storeHeader($headerSessionName, $headerValue, $headerName)
+    {
+        $this->startSession();
+
+        $this->checkToken($headerValue, $headerName, false);
+        //dd('storeHeader' ,$headerValue, $headerName);
+        Session::put($headerSessionName, $headerValue);
+    }
+
     /**
      * Guarda os cabeçalhos na sessão
      * @param $headers
      */
     protected function storeHeaders($headers)
     {
-        $this->startSession();
-
-        $this->checkToken($headers->{self::APP_HEADER_NAME}, self::APP_HEADER_NAME);
-        Session::put(self::SESSION_APP_HEADER_NAME, $headers->{self::APP_HEADER_NAME});
-
-        $this->checkToken($headers->{self::USER_HEADER_NAME}, self::USER_HEADER_NAME);
-        Session::put(self::SESSION_USER_HEADER_NAME, $headers->{self::USER_HEADER_NAME});
+        $this->storeHeader(self::SESSION_APP_HEADER_NAME, $headers->{self::APP_HEADER_NAME}, self::APP_HEADER_NAME);
+        $this->storeHeader(self::SESSION_USER_HEADER_NAME, $headers->{self::USER_HEADER_NAME}, self::USER_HEADER_NAME);
     }
 
     /**
      * Carrega os cabeçalhos da sessão
      */
-    private function loadHeaders()
+    private function loadHeaders($renewRequest)
     {
         $this->startSession();
 
         $this->headers = new stdClass();
 
+        // Caso seja uma requisição de renovação de token, não deixa a validação chamar a
+        // renovação de token novamente
+        $canRenew = !$renewRequest;
+
         if (!is_null(Session::get(self::SESSION_APP_HEADER_NAME))) {
             $appHeader = Session::get(self::SESSION_APP_HEADER_NAME);
-            $this->checkToken($appHeader, self::APP_HEADER_NAME);
-            $this->headers->{self::APP_HEADER_NAME} = $appHeader;
+
+            $decoded = $this->checkToken($appHeader, self::APP_HEADER_NAME, $canRenew);
+
+            $this->headers->{self::APP_HEADER_NAME} = new stdClass();
+            $this->headers->{self::APP_HEADER_NAME}->bearer = $appHeader;
+            $this->headers->{self::APP_HEADER_NAME}->payload = $decoded;
         }
 
         if (!is_null(Session::get(self::SESSION_USER_HEADER_NAME))) {
             $userHeader = Session::get(self::SESSION_USER_HEADER_NAME);
-            $this->checkToken($userHeader, self::USER_HEADER_NAME);
-            $this->headers->{self::USER_HEADER_NAME} = $userHeader;
+
+            $decoded = $this->checkToken($userHeader, self::USER_HEADER_NAME, $canRenew);
+
+            $this->headers->{self::USER_HEADER_NAME} = new stdClass();
+            $this->headers->{self::USER_HEADER_NAME}->bearer = $userHeader;
+            $this->headers->{self::USER_HEADER_NAME}->payload = $decoded;
         }
     }
 
@@ -274,37 +295,17 @@ class GraphqlRequest
         }
     }
 
-    /**
-     * Carrega o client GraphQL baseado no tipo de autenticação necessária
-     * @param null $authType
-     * @return Client
-     * @throws Exception
-     */
-    protected function getClient($authType = null)
+    private function loadClient()
     {
-        // Carregando os cabeçalhos
-        $this->loadHeaders();
-
-        if (is_null($authType)) {
-            throw \Exception('Defina o tipo de autenticação para sua requisição graphql.');
-        }
-
-        // Verificando se os cabeçalhos dependendo do tipo de autenticação
-        if ($authType === AuthType::APP_USER_AUTH) {
-            $this->checkHeaders();
-        } elseif ($authType === AuthType::APP_AUTH) {
-            $this->checkAppHeader();
-        }
-
         // Caso os cabeçalhos tenham sido enviados, contruindo o cliente GraphQL com as informações de cabeçalho
         // Cabeçalhos foram enviados e
         // Enviou cabeçalho da aplicação
         if (is_object($this->headers) && property_exists($this->headers, self::APP_HEADER_NAME)) {
             $headersConstructor = [];
-            $headersConstructor[self::APP_HEADER_NAME] = $this->headers->{self::APP_HEADER_NAME};
+            $headersConstructor[self::APP_HEADER_NAME] = $this->headers->{self::APP_HEADER_NAME}->bearer;
             // Enviou cabeçalho do usuário
             if (property_exists($this->headers, self::USER_HEADER_NAME)) {
-                $headersConstructor[self::USER_HEADER_NAME] = $this->headers->{self::USER_HEADER_NAME};
+                $headersConstructor[self::USER_HEADER_NAME] = $this->headers->{self::USER_HEADER_NAME}->bearer;
             }
 
             // Criando a instância do client graphql e enviando os cabeçalhos fornecidos
@@ -320,5 +321,81 @@ class GraphqlRequest
         }
 
         return $client;
+    }
+
+    /**
+     * Carrega o client GraphQL baseado no tipo de autenticação necessária
+     * @param null $authType
+     * @return Client
+     * @throws Exception
+     */
+    protected function getClient($authType = null)
+    {
+        if (is_null($authType)) {
+            throw new AuthNotDefinedException();
+        }
+
+        // Carregando os cabeçalhos
+        $this->loadHeaders(false);
+
+        // Verificando se os cabeçalhos dependendo do tipo de autenticação
+        if ($authType === AuthType::APP_USER_AUTH) {
+            $this->checkHeaders();
+        } elseif ($authType === AuthType::APP_AUTH) {
+            $this->checkAppHeader();
+        }
+
+        $client = $this->loadClient();
+
+        return $client;
+    }
+
+    public function renewUser()
+    {
+        $gql = <<<QUERY
+query {
+  renewUser
+}
+QUERY;
+
+        // Carregando os cabeçalhos
+        $this->loadHeaders(true);
+
+        // Carregando o client diretamente, sem checagem para evitar loop
+        $client = $this->loadClient();
+
+        $results = $client->runRawQuery($gql);
+
+        $token = $results->getResults()->data->renewUser;
+        $header = 'Bearer '.$token;
+
+        //Armazenar o novo token gerado
+        $this->storeHeader(self::SESSION_USER_HEADER_NAME, $header, self::USER_HEADER_NAME);
+
+        return $results->getResults()->data->renewUser;
+    }
+
+    public function renewApp()
+    {
+        $gql = <<<QUERY
+query {
+  renewApp
+}
+QUERY;
+
+        // Carregando os cabeçalhos
+        $this->loadHeaders(true);
+
+        // Carregando o client diretamente, sem checagem para evitar loop
+        $client = $this->loadClient();
+
+        $results = $client->runRawQuery($gql);
+
+        $token = $results->getResults()->data->renewApp;
+        $header = 'Bearer '.$token;
+
+        //Armazenar o novo token gerado
+        $this->storeHeader(self::SESSION_APP_HEADER_NAME, $header, self::APP_HEADER_NAME);
+        return $results->getResults()->data->renewApp;
     }
 }
