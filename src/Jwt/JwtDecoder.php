@@ -100,6 +100,9 @@ EOD;
     {
         $pubKey = $this->pubKeyArray[$this->env][$this->type];
 
+        // Permitir 10 segundos de tolerância entre a hora do servidor que gera o token
+        // este servidor web que valida o token.
+        JWT::$leeway = 10;
         $decoded = JWT::decode($this->jwt, $pubKey, array('RS256'));
 
         $decoded->expiraEm = new DateTime("@$decoded->exp");
