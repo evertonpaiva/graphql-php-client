@@ -22,6 +22,9 @@ class AuthGraphqlRequest extends GraphqlRequest
      */
     public function loginContaInstitucional($request)
     {
+        // Limpando a sessão prévia, caso exista
+        $this->cleanHeaders();
+
         $appInput = $this->generateAppInput();
         $userInput = $this->generateUserInput($request->containstitucional, $request->password);
 
@@ -41,8 +44,12 @@ class AuthGraphqlRequest extends GraphqlRequest
                 ]
             );
 
-        $results = $this->client->runQuery($gql);
-        return $results->getResults()->data->generateTokens->headers;
+        $results = $this->getClient(AuthType::NO_AUTH)->runQuery($gql);
+
+        // Autenticacao passou, retornou cabecalhos de app e user
+        $headers = $results->getResults()->data->generateTokens->headers;
+        $this->storeHeaders($headers);
+        return $headers;
     }
 
     /**
@@ -52,11 +59,11 @@ class AuthGraphqlRequest extends GraphqlRequest
     public function usuarioLogadoInfo()
     {
         $gql = (
-            new Query('me'))
+        new Query('me'))
             ->setSelectionSet(
                 [
                     (
-                        new Query('vinculos'))
+                    new Query('vinculos'))
                         ->setSelectionSet(
                             [
                                 'tipoVinculo',
@@ -68,7 +75,7 @@ class AuthGraphqlRequest extends GraphqlRequest
                 ]
             );
 
-        $results = $this->client->runQuery($gql);
+        $results = $this->getClient(AuthType::APP_USER_AUTH)->runQuery($gql);
         return $results->getResults()->data->me;
     }
 }
