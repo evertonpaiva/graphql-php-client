@@ -3,8 +3,9 @@
 namespace GraphqlClient\GraphqlRequest;
 
 use GraphQL\Client;
+use GraphQL\Query;
 use GraphQL\RawObject;
-use GraphqlClient\Exception\AuthNotDefinedException;
+use GraphQL\Variable;
 use GraphqlClient\Exception\DecodeTokenException;
 use GraphqlClient\Exception\HeaderNotDefinedException;
 use GraphqlClient\Jwt\JwtDecoder;
@@ -12,10 +13,10 @@ use GraphqlClient\Session\Session;
 use stdClass;
 
 /**
+ * Class GraphqlRequest
  * Controle de requisições HTTP de consultas GraphQL
  *
- * Class GraphqlRequest
- * @package App\Http\GraphqlRequests
+ * @package GraphqlClient\GraphqlRequest
  */
 class GraphqlRequest
 {
@@ -99,11 +100,69 @@ class GraphqlRequest
     private $graphqlUrlArray;
 
     /**
+     * Vetor com os campos disponíveis na entidade
+     * @var array
+     */
+    private $fields;
+
+    /**
+     * Tipo de autenticação necessária na API
+     * @var string
+     */
+    private $authType;
+
+    /**
+     * Nome da query GraphQL
+     * @var STRING
+     */
+    protected $queryName;
+
+    /**
+     * Vetor de argumentos da operação
+     * @var array
+     */
+    protected $arguments;
+
+    /**
+     * Vetor com os nomes das variáveis
+     * @var array
+     */
+    protected $variablesNames;
+
+    /**
+     * Vetor com os valores das variáveis
+     * @var array
+     */
+    protected $variablesValues;
+
+    /** Query GraphQL
+     * @var Query
+     */
+    protected $gql;
+
+    /**
+     * Informações de paginação da query
+     * @var PaginationQuery
+     */
+    protected $pagination;
+
+    /**
      * GraphqlRequest constructor.
      * @param null $headers Objeto com token de aplicação e token de usuário
      */
-    public function __construct()
+    public function __construct(array $fields = null, $authType = null)
     {
+        if (!is_null($fields)) {
+            $this->setFields($fields);
+        }
+        if (!is_null($authType)) {
+            $this->setAuthType($authType);
+        }
+
+        $this->arguments = [];
+        $this->variablesNames = [];
+        $this->variablesValues = [];
+
         $this->graphqlUrlArray['teste'] = self::GRAPHQL_URL_TESTE;
         $this->graphqlUrlArray['prod'] = self::GRAPHQL_URL_PROD;
 
@@ -226,6 +285,13 @@ class GraphqlRequest
         Session::startSession();
     }
 
+    /**
+     * Armazena as informações de cabeçalho na Sessão PHP
+     * @param $headerSessionName Nome da variável a ser salva na sessão
+     * @param $headerValue Valor da variável
+     * @param $headerName Tipo de cabeçalho
+     * @throws DecodeTokenException
+     */
     private function storeHeader($headerSessionName, $headerValue, $headerName)
     {
         $this->startSession();
@@ -295,6 +361,12 @@ class GraphqlRequest
         }
     }
 
+    /**
+     * Carrega o Client que se conecta ao servidor GraphQL
+     * O tipo de autenticação define quais os cabeçalhos serão enviados a cada requisição
+     *
+     * @return Client
+     */
     private function loadClient()
     {
         // Caso os cabeçalhos tenham sido enviados, contruindo o cliente GraphQL com as informações de cabeçalho
@@ -332,7 +404,7 @@ class GraphqlRequest
     protected function getClient($authType = null)
     {
         if (is_null($authType)) {
-            throw new AuthNotDefinedException();
+            $authType = $this->getAuthType();
         }
 
         // Carregando os cabeçalhos
@@ -350,6 +422,11 @@ class GraphqlRequest
         return $client;
     }
 
+    /**
+     * Renova o token de Usuário
+     * @return mixed
+     * @throws DecodeTokenException
+     */
     public function renewUser()
     {
         $gql = <<<QUERY
@@ -375,6 +452,11 @@ QUERY;
         return $results->getResults()->data->renewUser;
     }
 
+    /**
+     * Renova o token de Aplicação
+     * @return mixed
+     * @throws DecodeTokenException
+     */
     public function renewApp()
     {
         $gql = <<<QUERY
@@ -397,5 +479,137 @@ QUERY;
         //Armazenar o novo token gerado
         $this->storeHeader(self::SESSION_APP_HEADER_NAME, $header, self::APP_HEADER_NAME);
         return $results->getResults()->data->renewApp;
+    }
+
+    /**
+     * Armazena os campos da query
+     * @param array $fields
+     */
+    public function setFields(array $fields)
+    {
+        $this->fields = $fields;
+    }
+
+    /**
+     * Recupera os campos da query
+     * @return array
+     */
+    public function getFiedls()
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Armazena o tipo de autenticação
+     * @param $authType
+     */
+    public function setAuthType($authType)
+    {
+        $this->authType = $authType;
+    }
+
+    /**
+     * Recupera o tipo de autenticação
+     * @return string
+     */
+    public function getAuthType()
+    {
+        return $this->authType;
+    }
+
+    /**
+     * Gera uma query GraphQL para informações do tipo paginadas obedecendo o padrão Relay
+     * @return $this
+     */
+    protected function generatePaginatedQuery()
+    {
+        $this->gql = new Query($this->queryName);
+
+        $size = $this->pagination->getSize();
+        $sizeName = $this->pagination->getSizeName();
+        $cursor = $this->pagination->getCursor();
+        $cursorName = $this->pagination->getCursorName();
+
+        $this->variablesNames[] = new Variable($sizeName, 'PaginationLimit', true);
+        $this->variablesValues[$sizeName] = $size;
+
+        if (!is_null($cursor)) {
+            $this->variablesNames[] = new Variable($cursorName, 'String', true);
+            $this->variablesValues[$cursorName] = $cursor;
+
+            // Cria a variável de paginação
+            //Para frente: '{first: $first, after: $after}'
+            // Para trás:  '{last: $last, before: $before}'
+            $paginationString = '{'.$sizeName.': $'.$sizeName.', '.$cursorName.': $'.$cursorName.'}';
+            $this->arguments = ['pagination' => new RawObject($paginationString)];
+        } else {
+            // Cria a variável de paginação
+            // Para frente: '{first: $first}'
+            // Para trás:  '{last: $last}'
+            $paginationString = '{'.$sizeName.': $'.$sizeName.'}';
+            $this->arguments = ['pagination' => new RawObject($paginationString)];
+        }
+
+        $this->gql->setVariables($this->variablesNames);
+
+        $this->gql->setArguments($this->arguments);
+
+        $this->generatePageInfoField();
+
+        return $this;
+    }
+
+    /**
+     * Gera query GraphQL para os campos de informações de paginação
+     */
+    private function generatePageInfoField()
+    {
+        $this->gql->setSelectionSet(
+            [
+                new PaginatedDataQuery($this->getFiedls()),
+                new PageInfoQuery()
+            ]
+        );
+    }
+
+    /**
+     * Gera query GraphQL para informações simples, de apenas 1 registro (não paginadas)
+     * @return $this
+     */
+    protected function generateSingleQuery()
+    {
+        $this->gql = (new Query($this->queryName))
+            ->setVariables(
+                $this->variablesNames
+            );
+
+        $this->gql->setArguments($this->arguments);
+
+        $this->gql->setSelectionSet($this->getFiedls());
+
+        return $this;
+    }
+
+    /**
+     * Executa query GraphQL e retorna os dados recebidos como resposta
+     * @return mixed
+     */
+    public function getResults()
+    {
+        $results = $this->getClient()
+            ->runQuery($this->gql, false, $this->variablesValues);
+
+        return $results->getResults()->data->{$this->queryName};
+    }
+
+    /**
+     * Limpa as informações de query GraphQL, deixando o objeto pronto para criar uma nova query
+     */
+    protected function clearQueryObjects()
+    {
+        $this->arguments = [];
+        $this->variablesNames = [];
+        $this->variablesValues = [];
+        $this->gql = null;
     }
 }
