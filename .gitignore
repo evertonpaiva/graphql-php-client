@@ -2,6 +2,9 @@
 .idea
 vendor/
 
+# Arquivo local de variáveis de ambiente
+.env
+
 coverage/*
 !coverage/.gitkeep
 
