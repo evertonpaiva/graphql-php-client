@@ -1,3 +1,9 @@
 # Ignorando pasta do editor PHPStorm
 .idea
 vendor/
+
+coverage/*
+!coverage/.gitkeep
+
+# Cache do PHPUnit
+.phpunit.result.cache
