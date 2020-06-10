@@ -4,6 +4,9 @@ set -e
 
 COMPOSER_IMG=graphql-client:dev
 
+echo -e "\nParando a stack"
+docker-compose down
+
 echo -e "\nAtualizando composer.lock"
 docker run --rm --interactive --tty \
             --volume $PWD:/app \
