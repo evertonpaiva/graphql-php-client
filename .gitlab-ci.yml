@@ -18,7 +18,7 @@ build-test:
     - *prepara_variaveis
   script:
     - >
-      if [ "$BUILD" == "S" ]; then
+      if [ "$BUILD_TEST_IMG" == "S" ]; then
         echo "Build desabilitado, pulando etapa...";
       else
         echo "Criando imagem"
