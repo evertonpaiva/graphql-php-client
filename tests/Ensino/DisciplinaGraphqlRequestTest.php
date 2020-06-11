@@ -9,6 +9,9 @@ use stdClass;
 
 class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
 {
+    /**
+     * Recupera disciplinas por código
+     */
     public function testDisciplinaQueryGetById()
     {
         // Carrega a classe de disciplina
@@ -27,6 +30,9 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertEquals($expected, $disciplina);
     }
 
+    /**
+     * Lista disciplinas
+     */
     public function testDisciplinaQueryList()
     {
         // Carrega a classe de disciplina
@@ -39,6 +45,9 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($disciplinas->pageInfo);
     }
 
+    /**
+     * Lista disciplinas com paginação para frente
+     */
     public function testDisciplinaQueryListCursor()
     {
         // Carrega a classe de disciplina
@@ -51,6 +60,9 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($disciplinas->pageInfo);
     }
 
+    /**
+     * Lista disciplinas com paginação para trás
+     */
     public function testDisciplinaQueryListBackwardPagination()
     {
         // Carrega a classe de disciplina
