@@ -12,7 +12,8 @@
     "require": {
         "php": ">=7.1",
         "gmostafa/php-graphql-client": "^1.4",
-        "firebase/php-jwt": "5.*"
+        "firebase/php-jwt": "5.*",
+        "sensiolabs/security-checker": "^6.0"
     },
     "require-dev": {
         "phpmd/phpmd" : "@stable",
