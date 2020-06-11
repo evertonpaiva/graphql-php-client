@@ -13,17 +13,15 @@ use GraphqlClient\GraphqlRequest\PaginationQuery;
  *
  * @package GraphqlClient\GraphqlRequest
  */
-class DisciplinaGraphqlRequest extends GraphqlRequest
+class DepartamentoGraphqlRequest extends GraphqlRequest
 {
 
     public function __construct()
     {
         $fields = [
-            'disciplina',
-            'nome',
             'iddepto',
-            'creditostotal',
-            'cargahorariatotal'
+            'depto',
+            'nome'
         ];
 
         $authType = AuthType::APP_USER_AUTH;
@@ -32,18 +30,18 @@ class DisciplinaGraphqlRequest extends GraphqlRequest
     }
 
     /**
-     * Realiza busca por código da disciplina
-     * @param $disciplina código da disciplina
-     * @return DisciplinaGraphqlRequest
+     * Realiza busca por código do departamento
+     * @param $iddepto código do departamento
+     * @return $this
      */
-    public function queryGetById($disciplina)
+    public function queryGetById($iddepto)
     {
         $this->clearQueryObjects();
-        $this->queryName = 'ensinoDisciplina';
+        $this->queryName = 'ensinoDepartamento';
 
-        $this->variablesNames[] = new Variable('disciplina', 'String', true);
-        $this->variablesValues['disciplina'] = $disciplina;
-        $this->arguments = ['disciplina' => '$disciplina'];
+        $this->variablesNames[] = new Variable('iddepto', 'String', true);
+        $this->variablesValues['iddepto'] = $iddepto;
+        $this->arguments = ['iddepto' => '$iddepto'];
 
         $this->generateSingleQuery();
 
@@ -51,14 +49,14 @@ class DisciplinaGraphqlRequest extends GraphqlRequest
     }
 
     /**
-     * Lista de disciplinas
+     * Lista de departamentos
      * @param PaginationQuery $pagination informações de paginação
      * @return DisciplinaGraphqlRequest
      */
     public function queryList(PaginationQuery $pagination)
     {
         $this->clearQueryObjects();
-        $this->queryName = 'ensinoDisciplinas';
+        $this->queryName = 'ensinoDepartamentos';
         $this->pagination = $pagination;
 
         return $this->generatePaginatedQuery();

@@ -7,15 +7,18 @@ use GraphqlClient\Tests\GraphqlRequestTest;
 use GraphqlClient\GraphqlRequest\Ensino\DisciplinaGraphqlRequest;
 use stdClass;
 
-class EnsinoDisciplinaGraphqlRequestTest extends GraphqlRequestTest
+class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
 {
+    /**
+     * Recupera disciplinas por código
+     */
     public function testDisciplinaQueryGetById()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         // Recupera informações de disciplina por código
-        $disciplina = $disciplinaGrapqhlRequest->queryGetById('COM001')->getResults();
+        $disciplina = $disciplinaGraphqlRequest->queryGetById('COM001')->getResults();
 
         $expected = new stdClass;
         $expected->disciplina = 'COM001';
@@ -27,6 +30,9 @@ class EnsinoDisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertEquals($expected, $disciplina);
     }
 
+    /**
+     * Lista disciplinas
+     */
     public function testDisciplinaQueryList()
     {
         // Carrega a classe de disciplina
@@ -39,6 +45,9 @@ class EnsinoDisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($disciplinas->pageInfo);
     }
 
+    /**
+     * Lista disciplinas com paginação para frente
+     */
     public function testDisciplinaQueryListCursor()
     {
         // Carrega a classe de disciplina
@@ -51,13 +60,16 @@ class EnsinoDisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($disciplinas->pageInfo);
     }
 
+    /**
+     * Lista disciplinas com paginação para trás
+     */
     public function testDisciplinaQueryListBackwardPagination()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         $pagination = new BackwardPaginationQuery(1);
-        $disciplinas = $disciplinaGrapqhlRequest->queryList($pagination)->getResults();
+        $disciplinas = $disciplinaGraphqlRequest->queryList($pagination)->getResults();
 
         $this->assertIsArray($disciplinas->edges);
         $this->assertIsObject($disciplinas->pageInfo);
