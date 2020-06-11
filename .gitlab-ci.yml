@@ -42,8 +42,9 @@ tests-phpunit:
   before_script:
     - export APP_ENV='testing'
   script:
-    - echo "Executando testes"
+    - echo "Instalando dependências"
     - composer install
+    - echo "Executando testes"
     # PHP Unit
     - ./phpunit.sh
   when: on_success
@@ -57,6 +58,8 @@ tests-other:
   before_script:
     - export APP_ENV='testing'
   script:
+    - echo "Instalando dependências"
+    - composer install
     - echo "Executando testes"
     # Padrao de codificacao
     - ./phpcs.sh
