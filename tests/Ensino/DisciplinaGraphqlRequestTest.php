@@ -7,15 +7,15 @@ use GraphqlClient\Tests\GraphqlRequestTest;
 use GraphqlClient\GraphqlRequest\Ensino\DisciplinaGraphqlRequest;
 use stdClass;
 
-class EnsinoDisciplinaGraphqlRequestTest extends GraphqlRequestTest
+class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
 {
     public function testDisciplinaQueryGetById()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         // Recupera informações de disciplina por código
-        $disciplina = $disciplinaGrapqhlRequest->queryGetById('COM001')->getResults();
+        $disciplina = $disciplinaGraphqlRequest->queryGetById('COM001')->getResults();
 
         $expected = new stdClass;
         $expected->disciplina = 'COM001';

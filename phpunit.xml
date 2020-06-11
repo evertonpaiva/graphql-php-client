@@ -10,7 +10,9 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Feature">
-            <directory suffix="Test.php">./tests</directory>
+            <file>tests/AuthGraphqlRequestTest.php</file>
+            <file>tests/Ensino/DisciplinaGraphqlRequestTest.php</file>
+            <file>tests/Ensino/DepartamentoGraphqlRequestTest.php</file>
         </testsuite>
     </testsuites>
     <filter>

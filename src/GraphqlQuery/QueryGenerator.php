@@ -6,7 +6,8 @@ use GraphQL\Query;
 use GraphqlClient\GraphqlRequest\PageInfoQuery;
 use GraphqlClient\GraphqlRequest\PaginatedDataQuery;
 
-class QueryGenerator {
+class QueryGenerator
+{
 
     /**
      * Gera query GraphQL para informações simples, de apenas 1 registro (não paginadas)
