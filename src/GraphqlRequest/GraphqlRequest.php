@@ -8,6 +8,7 @@ use GraphQL\RawObject;
 use GraphQL\Variable;
 use GraphqlClient\Exception\DecodeTokenException;
 use GraphqlClient\Exception\HeaderNotDefinedException;
+use GraphqlClient\GraphqlQuery\QueryGenerator;
 use GraphqlClient\Jwt\JwtDecoder;
 use GraphqlClient\Session\Session;
 use stdClass;
@@ -494,7 +495,7 @@ QUERY;
      * Recupera os campos da query
      * @return array
      */
-    public function getFiedls()
+    public function getFields()
     {
         return $this->fields;
     }
@@ -515,6 +516,19 @@ QUERY;
     public function getAuthType()
     {
         return $this->authType;
+    }
+
+    /**
+     * Gera uma query GraphQL para registros simples
+     */
+    protected function generateSingleQuery(): void
+    {
+        $this->gql = QueryGenerator::generateSingleQuery(
+            $this->queryName,
+            $this->variablesNames,
+            $this->arguments,
+            $this->getFields()
+        );
     }
 
     /**
@@ -554,38 +568,7 @@ QUERY;
 
         $this->gql->setArguments($this->arguments);
 
-        $this->generatePageInfoField();
-
-        return $this;
-    }
-
-    /**
-     * Gera query GraphQL para os campos de informações de paginação
-     */
-    private function generatePageInfoField()
-    {
-        $this->gql->setSelectionSet(
-            [
-                new PaginatedDataQuery($this->getFiedls()),
-                new PageInfoQuery()
-            ]
-        );
-    }
-
-    /**
-     * Gera query GraphQL para informações simples, de apenas 1 registro (não paginadas)
-     * @return $this
-     */
-    protected function generateSingleQuery()
-    {
-        $this->gql = (new Query($this->queryName))
-            ->setVariables(
-                $this->variablesNames
-            );
-
-        $this->gql->setArguments($this->arguments);
-
-        $this->gql->setSelectionSet($this->getFiedls());
+        $this->gql = QueryGenerator::generatePageInfoField($this->gql, $this->getFields());
 
         return $this;
     }

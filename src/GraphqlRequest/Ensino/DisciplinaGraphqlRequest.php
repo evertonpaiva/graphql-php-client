@@ -45,7 +45,9 @@ class DisciplinaGraphqlRequest extends GraphqlRequest
         $this->variablesValues['disciplina'] = $disciplina;
         $this->arguments = ['disciplina' => '$disciplina'];
 
-        return $this->generateSingleQuery();
+        $this->generateSingleQuery();
+
+        return $this;
     }
 
     /**
