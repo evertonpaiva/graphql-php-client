@@ -66,10 +66,10 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
     public function testDisciplinaQueryListBackwardPagination()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         $pagination = new BackwardPaginationQuery(1);
-        $disciplinas = $disciplinaGrapqhlRequest->queryList($pagination)->getResults();
+        $disciplinas = $disciplinaGraphqlRequest->queryList($pagination)->getResults();
 
         $this->assertIsArray($disciplinas->edges);
         $this->assertIsObject($disciplinas->pageInfo);
