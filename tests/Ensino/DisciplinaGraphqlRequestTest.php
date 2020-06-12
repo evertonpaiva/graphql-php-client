@@ -1,8 +1,10 @@
 <?php
 namespace GraphqlClient\Tests\Ensino;
 
+use GraphqlClient\Exception\WrongInstanceRelationException;
 use GraphqlClient\GraphqlQuery\BackwardPaginationQuery;
 use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
+use GraphqlClient\GraphqlRequest\Ensino\DepartamentoGraphqlRequest;
 use GraphqlClient\Tests\GraphqlRequestTest;
 use GraphqlClient\GraphqlRequest\Ensino\DisciplinaGraphqlRequest;
 use stdClass;
@@ -38,8 +40,8 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         // Recupera informações de disciplina por código
         $disciplina =
             $disciplinaGraphqlRequest
-                ->queryGetById('COM001')
                 ->addRelationDepartamento()
+                ->queryGetById('COM001')
                 ->getResults();
 
         $expected = new stdClass;
@@ -53,9 +55,21 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $expected->objDepartamento->depto = 'COM';
         $expected->objDepartamento->nome = 'DEPARTAMENTO DE COMPUTAÇÃO';
 
-        var_dump('Disciplina retornada', $disciplina->objDepartamento);
-
         $this->assertEquals($expected, $disciplina);
+    }
+
+    public function testWrongRelationException(){
+        // Tipo de exceção esperada
+        $this->expectException(WrongInstanceRelationException::class);
+
+        // Carrega a classe de disciplina
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
+
+        // Carrega disciplina com relacionamento incorreto
+        $disciplinaGraphqlRequest
+            ->addRelationDepartamento($disciplinaGraphqlRequest)
+            ->queryGetById('COM001')
+            ->getResults();
     }
 
     /**
