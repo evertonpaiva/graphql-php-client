@@ -8,7 +8,9 @@ use GraphQL\RawObject;
 use GraphQL\Variable;
 use GraphqlClient\Exception\DecodeTokenException;
 use GraphqlClient\Exception\HeaderNotDefinedException;
-use GraphqlClient\GraphqlQuery\QueryGenerator;
+use GraphqlClient\Exception\WrongInstanceRelationException;
+use GraphqlClient\GraphqlQuery\GeneratorQuery;
+use GraphqlClient\GraphqlQuery\RelationQuery;
 use GraphqlClient\Jwt\JwtDecoder;
 use GraphqlClient\Session\Session;
 use stdClass;
@@ -19,7 +21,7 @@ use stdClass;
  *
  * @package GraphqlClient\GraphqlRequest
  */
-class GraphqlRequest
+abstract class GraphqlRequest
 {
     /**
      * Variável de ambiente para o ID da Aplicação
@@ -106,6 +108,8 @@ class GraphqlRequest
      */
     private $fields;
 
+    private $relations;
+
     /**
      * Tipo de autenticação necessária na API
      * @var string
@@ -163,6 +167,7 @@ class GraphqlRequest
         $this->arguments = [];
         $this->variablesNames = [];
         $this->variablesValues = [];
+        $this->relations = [];
 
         $this->graphqlUrlArray['teste'] = self::GRAPHQL_URL_TESTE;
         $this->graphqlUrlArray['prod'] = self::GRAPHQL_URL_PROD;
@@ -500,6 +505,22 @@ QUERY;
         return $this->fields;
     }
 
+    protected function addRelation(RelationQuery $relation) {
+        $className = $relation->getRelationClass();
+        $relationInstance = $relation->getRelation();
+
+        // Caso não tenha enviado o objeto relation instanciado, cria uma instância padrão
+        if(is_null($relationInstance)){
+            $graphqlRequest = new $className();
+            $relation->setRelation($graphqlRequest);
+        } else {
+            if (!$relationInstance instanceof $className){
+                throw new WrongInstanceRelationException($relation->getRelationName(), $className);
+            }
+        }
+        $this->relations[] = $relation;
+    }
+
     /**
      * Armazena o tipo de autenticação
      * @param $authType
@@ -523,11 +544,12 @@ QUERY;
      */
     protected function generateSingleQuery(): void
     {
-        $this->gql = QueryGenerator::generateSingleQuery(
+        $this->gql = GeneratorQuery::generateSingleQuery(
             $this->queryName,
             $this->variablesNames,
             $this->arguments,
-            $this->getFields()
+            $this->fields,
+            $this->relations
         );
     }
 
@@ -568,7 +590,7 @@ QUERY;
 
         $this->gql->setArguments($this->arguments);
 
-        $this->gql = QueryGenerator::generatePageInfoField($this->gql, $this->getFields());
+        $this->gql = GeneratorQuery::generatePageInfoField($this->gql, $this->getFields());
 
         return $this;
     }
