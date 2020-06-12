@@ -4,7 +4,6 @@ namespace GraphqlClient\Tests\Ensino;
 use GraphqlClient\Exception\WrongInstanceRelationException;
 use GraphqlClient\GraphqlQuery\BackwardPaginationQuery;
 use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
-use GraphqlClient\GraphqlRequest\Ensino\DepartamentoGraphqlRequest;
 use GraphqlClient\Tests\GraphqlRequestTest;
 use GraphqlClient\GraphqlRequest\Ensino\DisciplinaGraphqlRequest;
 use stdClass;
@@ -78,10 +77,10 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
     public function testDisciplinaQueryList()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3);
-        $disciplinas = $disciplinaGrapqhlRequest->queryList($pagination)->getResults();
+        $disciplinas = $disciplinaGraphqlRequest->queryList($pagination)->getResults();
 
         $this->assertIsArray($disciplinas->edges);
         $this->assertIsObject($disciplinas->pageInfo);
@@ -93,10 +92,10 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
     public function testDisciplinaQueryListCursor()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3, 'WyIxMzY4MyAgICAgICAgICAgICAgICJd');
-        $disciplinas = $disciplinaGrapqhlRequest->queryList($pagination)->getResults();
+        $disciplinas = $disciplinaGraphqlRequest->queryList($pagination)->getResults();
 
         $this->assertIsArray($disciplinas->edges);
         $this->assertIsObject($disciplinas->pageInfo);
