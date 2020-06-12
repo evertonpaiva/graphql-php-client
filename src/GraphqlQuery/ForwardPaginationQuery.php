@@ -1,19 +1,19 @@
 <?php
 
-namespace GraphqlClient\GraphqlRequest;
+namespace GraphqlClient\GraphqlQuery;
 
 /**
- * Class BackwardPaginationQuery
+ * Class ForwardPaginationQuery
  * Realiza paginação para frente
  *
  * @package GraphqlClient\GraphqlRequest
  */
-class BackwardPaginationQuery extends PaginationQuery
+class ForwardPaginationQuery extends PaginationQuery
 {
 
-    public function __construct(int $last = 10, String $before = null)
+    public function __construct(int $first = 10, String $after = null)
     {
-        parent::__construct($last, $before);
+        parent::__construct($first, $after);
     }
 
     /**
@@ -22,7 +22,7 @@ class BackwardPaginationQuery extends PaginationQuery
      */
     public function getSizeName()
     {
-        return 'last';
+        return 'first';
     }
 
     /**
@@ -31,6 +31,6 @@ class BackwardPaginationQuery extends PaginationQuery
      */
     public function getCursorName()
     {
-        return 'before';
+        return 'after';
     }
 }

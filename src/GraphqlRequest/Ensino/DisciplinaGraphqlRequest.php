@@ -3,9 +3,13 @@
 namespace GraphqlClient\GraphqlRequest\Ensino;
 
 use GraphQL\Variable;
+use GraphqlClient\GraphqlQuery\PageInfoQuery;
+use GraphqlClient\GraphqlQuery\PaginatedDataQuery;
+use GraphqlClient\GraphqlQuery\QueryGenerator;
+use GraphqlClient\GraphqlQuery\SingleRelationQuery;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
-use GraphqlClient\GraphqlRequest\PaginationQuery;
+use GraphqlClient\GraphqlQuery\PaginationQuery;
 
 /**
  * Class AuthGraphqlRequest
@@ -46,6 +50,21 @@ class DisciplinaGraphqlRequest extends GraphqlRequest
         $this->arguments = ['disciplina' => '$disciplina'];
 
         $this->generateSingleQuery();
+
+        return $this;
+    }
+
+    public function addRelationDepartamento(){
+        $queryDepartamento = new DepartamentoGraphqlRequest();
+        $fieldsDepartamento = $queryDepartamento->getFields();
+
+        $relationName = 'objDepartamento';
+
+        $this->gql->setSelectionSet(
+            [
+                new SingleRelationQuery($relationName, $fieldsDepartamento)
+            ]
+        );
 
         return $this;
     }

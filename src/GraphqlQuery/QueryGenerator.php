@@ -3,8 +3,6 @@
 namespace GraphqlClient\GraphqlQuery;
 
 use GraphQL\Query;
-use GraphqlClient\GraphqlRequest\PageInfoQuery;
-use GraphqlClient\GraphqlRequest\PaginatedDataQuery;
 
 class QueryGenerator
 {
@@ -33,8 +31,11 @@ class QueryGenerator
 
     /**
      * Gera query GraphQL para os campos de informações de paginação
+     * @param $gql query GraphQL
+     * @param $fields vetor de campos
+     * @return mixed
      */
-    public static function generatePageInfoField($gql, $fields)
+    public static function generatePageInfoField($gql, $fields): Query
     {
         $gql->setSelectionSet(
             [

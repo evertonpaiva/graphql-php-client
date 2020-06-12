@@ -2,7 +2,7 @@
 namespace GraphqlClient\Tests\Ensino;
 
 use GraphqlClient\GraphqlRequest\Ensino\DepartamentoGraphqlRequest;
-use GraphqlClient\GraphqlRequest\ForwardPaginationQuery;
+use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
 use GraphqlClient\Tests\GraphqlRequestTest;
 use GraphqlClient\GraphqlRequest\Ensino\DisciplinaGraphqlRequest;
 use stdClass;
