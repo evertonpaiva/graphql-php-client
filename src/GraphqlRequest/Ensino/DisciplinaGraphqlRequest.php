@@ -3,11 +3,7 @@
 namespace GraphqlClient\GraphqlRequest\Ensino;
 
 use GraphQL\Variable;
-use GraphqlClient\GraphqlQuery\PageInfoQuery;
-use GraphqlClient\GraphqlQuery\PaginatedDataQuery;
-use GraphqlClient\GraphqlQuery\QueryGenerator;
 use GraphqlClient\GraphqlQuery\RelationQuery;
-use GraphqlClient\GraphqlQuery\SingleRelationQuery;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
