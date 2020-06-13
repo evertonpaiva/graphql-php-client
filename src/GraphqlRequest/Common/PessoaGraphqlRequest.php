@@ -3,7 +3,10 @@
 namespace GraphqlClient\GraphqlRequest\Common;
 
 use GraphQL\Variable;
+use GraphqlClient\GraphqlQuery\RelationQuery;
+use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\GraphqlRequest\AuthType;
+use GraphqlClient\GraphqlRequest\Ensino\DocenteGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
@@ -51,12 +54,27 @@ class PessoaGraphqlRequest extends GraphqlRequest
         return $this;
     }
 
+    public function addRelationDocentes($docente = null, $pagination = null, $filters = null){
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'docentes',
+                DocenteGraphqlRequest::class,
+                $docente,
+                $pagination,
+                $filters
+            )
+        );
+
+        return $this;
+    }
+
     /**
      * Lista de pessoas
      * @param PaginationQuery $pagination informações de paginação
      * @return PessoaGraphqlRequest
      */
-    public function queryList(PaginationQuery $pagination)
+    public function queryList($pagination = null)
     {
         $this->clearQueryObjects();
         $this->queryName = 'commonPessoas';
