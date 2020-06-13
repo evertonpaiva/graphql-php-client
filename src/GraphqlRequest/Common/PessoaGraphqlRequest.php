@@ -54,7 +54,8 @@ class PessoaGraphqlRequest extends GraphqlRequest
         return $this;
     }
 
-    public function addRelationDocentes($docente = null, $pagination = null, $filters = null){
+    public function addRelationDocentes($docente = null, $pagination = null, $filters = null)
+    {
         $this->addRelation(
             new RelationQuery(
                 RelationType::PAGINATED,

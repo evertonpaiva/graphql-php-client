@@ -52,7 +52,8 @@ class DisciplinaGraphqlRequest extends GraphqlRequest
         return $this;
     }
 
-    public function addRelationDepartamento($departamento = null){
+    public function addRelationDepartamento($departamento = null)
+    {
         $this->addRelation(
             new RelationQuery(
                 RelationType::SINGLE,

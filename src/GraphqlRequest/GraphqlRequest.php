@@ -509,16 +509,17 @@ QUERY;
         return $this->fields;
     }
 
-    protected function addRelation(RelationQuery $relation) {
+    protected function addRelation(RelationQuery $relation)
+    {
         $className = $relation->getRelationClass();
         $relationInstance = $relation->getRelation();
 
         // Caso não tenha enviado o objeto relation instanciado, cria uma instância padrão
-        if(is_null($relationInstance)){
+        if (is_null($relationInstance)) {
             $graphqlRequest = new $className();
             $relation->setRelation($graphqlRequest);
         } else {
-            if (!$relationInstance instanceof $className){
+            if (!$relationInstance instanceof $className) {
                 throw new WrongInstanceRelationException($relation->getRelationName(), $className);
             }
         }
@@ -528,12 +529,14 @@ QUERY;
 
         // Se for uma relation do tipo paginado
         // Caso não tenha enviado o objeto relation instanciado, cria uma instância padrão
-        if($relationType === RelationType::PAGINATED){
-            if(is_null($paginationInstance)){
+        if ($relationType === RelationType::PAGINATED) {
+            if (is_null($paginationInstance)) {
                 $pagination = new ForwardPaginationQuery();
                 $relation->setPagination($pagination);
             } else {
-                if (!$paginationInstance instanceof ForwardPaginationQuery || !$paginationInstance instanceof BackwardPaginationQuery){
+                if (!$paginationInstance instanceof ForwardPaginationQuery ||
+                    !$paginationInstance instanceof BackwardPaginationQuery
+                ) {
                     throw new WrongInstancePaginationException($className, $relation->getRelationName());
                 }
             }
@@ -575,7 +578,7 @@ QUERY;
 
         $this->gql = $generated->gql;
 
-        foreach ($generated->variablesValues as $k => $vv){
+        foreach ($generated->variablesValues as $k => $vv) {
             $this->variablesValues[$k] = $vv;
         }
     }
@@ -592,10 +595,12 @@ QUERY;
 
         // Se for uma relation do tipo paginado
         // Caso não tenha enviado o objeto relation instanciado, cria uma instância padrão
-        if(is_null($paginationInstance)){
+        if (is_null($paginationInstance)) {
             $this->pagination = new ForwardPaginationQuery();
         } else {
-            if (!($paginationInstance instanceof ForwardPaginationQuery || $paginationInstance instanceof BackwardPaginationQuery)){
+            if (!($paginationInstance instanceof ForwardPaginationQuery ||
+                    $paginationInstance instanceof BackwardPaginationQuery)
+            ) {
                 throw new WrongInstancePaginationException($this->queryName);
             }
         }
@@ -657,27 +662,33 @@ QUERY;
         $this->gql = null;
     }
 
-    public function setQueryName(string $queryName){
+    public function setQueryName(string $queryName)
+    {
         $this->queryName = $queryName;
     }
 
-    public function setPagination(PaginationQuery $pagination){
+    public function setPagination(PaginationQuery $pagination)
+    {
         $this->pagination = $pagination;
     }
 
-    public function getGql(): Query{
+    public function getGql(): Query
+    {
         return $this->gql;
     }
 
-    public function getVariablesNames() {
+    public function getVariablesNames()
+    {
         return $this->variablesNames;
     }
 
-    public function getArguments() {
+    public function getArguments()
+    {
         return $this->arguments;
     }
 
-    public function getVariablesValues() {
+    public function getVariablesValues()
+    {
         return $this->variablesValues;
     }
 }

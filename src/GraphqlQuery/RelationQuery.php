@@ -3,7 +3,8 @@ namespace GraphqlClient\GraphqlQuery;
 
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 
-class RelationQuery {
+class RelationQuery
+{
     private $type;
     private $relationName;
     private $relationClass;
@@ -18,8 +19,7 @@ class RelationQuery {
         $relation = null,
         $pagination = null,
         $filters = null
-    )
-    {
+    ) {
         $this->type = $type;
         $this->relationName = $relationName;
         $this->relationClass = $relationClass;
@@ -28,7 +28,8 @@ class RelationQuery {
         $this->filters = $filters;
     }
 
-    public function getType(){
+    public function getType()
+    {
         return $this->type;
     }
 
@@ -52,15 +53,18 @@ class RelationQuery {
         $this->relation = $relation;
     }
 
-    public function getPagination(){
+    public function getPagination()
+    {
         return $this->pagination;
     }
 
-    public function setPagination(PaginationQuery $pagination) {
+    public function setPagination(PaginationQuery $pagination)
+    {
         $this->pagination = $pagination;
     }
 
-    public function getFilters() {
+    public function getFilters()
+    {
         return $this->filters;
     }
 }

@@ -21,9 +21,9 @@ class GeneratorQuery
         $combinedVariablesValues = [];
         $combinedVariablesNames = $variablesNames;
 
-        foreach ($relations as $r){
+        foreach ($relations as $r) {
             // Query simples, não possui paginação nem filtros
-            if($r->getType() === RelationType::SINGLE){
+            if ($r->getType() === RelationType::SINGLE) {
                 $fieldsRelation = new Query($r->getRelationName());
                 $fieldsRelation->setSelectionSet($r->getRelation()->getFields());
             // Query com paginacao
@@ -43,7 +43,7 @@ class GeneratorQuery
                 $relation->generatePaginatedQuery($sufix);
 
                 $fieldsRelation = $relation->getGql();
-                foreach($relation->getVariablesNames() as $v){
+                foreach ($relation->getVariablesNames() as $v) {
                     $combinedVariablesNames[] = $v;
                 }
 
