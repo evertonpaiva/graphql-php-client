@@ -57,7 +57,8 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertEquals($expected, $disciplina);
     }
 
-    public function testWrongRelationException(){
+    public function testWrongRelationException()
+    {
         // Tipo de exceção esperada
         $this->expectException(WrongInstanceRelationException::class);
 
