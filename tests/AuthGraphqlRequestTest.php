@@ -5,9 +5,30 @@ use GraphqlClient\GraphqlRequest\AuthGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\Session\Session;
 use stdClass;
+use GraphqlClient\Exception\HeaderNotDefinedException;
 
 class AuthGraphqlRequestTest extends GraphqlRequestTest
 {
+    /**
+     * Tenta acessar informações do usuário logado quando a sessão
+     * não possui os cabeçalhos de app e usuário, exceção esperada
+     */
+    public function testUserInfoSemEstarLogado()
+    {
+        // Tipo de exceção esperada
+        $this->expectException(HeaderNotDefinedException::class);
+
+        Session::startSession();
+        Session::forget(GraphqlRequest::SESSION_APP_HEADER_NAME);
+        Session::forget(GraphqlRequest::SESSION_USER_HEADER_NAME);
+
+        // Carrega a classe de autenticação
+        $authGraphqlRequest = new AuthGraphqlRequest();
+
+        // Recupera as informações do usuário logado
+        $userInfo = $authGraphqlRequest->usuarioLogadoInfo();
+    }
+
     /**
      * Testa o login na API com a Conta Institucional.
      * Em caso de sucesso, os tokens ficarão salvos na sessão para os demais testes
