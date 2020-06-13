@@ -9,8 +9,13 @@ use GraphQL\Variable;
 use GraphqlClient\Exception\DecodeTokenException;
 use GraphqlClient\Exception\HeaderNotDefinedException;
 use GraphqlClient\Exception\WrongInstanceRelationException;
+use GraphqlClient\Exception\WrongInstancePaginationException;
+use GraphqlClient\GraphqlQuery\BackwardPaginationQuery;
+use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
 use GraphqlClient\GraphqlQuery\GeneratorQuery;
+use GraphqlClient\GraphqlQuery\PaginationQuery;
 use GraphqlClient\GraphqlQuery\RelationQuery;
+use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\Jwt\JwtDecoder;
 use GraphqlClient\Session\Session;
 use stdClass;
@@ -21,7 +26,7 @@ use stdClass;
  *
  * @package GraphqlClient\GraphqlRequest
  */
-abstract class GraphqlRequest
+class GraphqlRequest
 {
     /**
      * Variável de ambiente para o ID da Aplicação
@@ -303,7 +308,6 @@ abstract class GraphqlRequest
         $this->startSession();
 
         $this->checkToken($headerValue, $headerName, false);
-        //dd('storeHeader' ,$headerValue, $headerName);
         Session::put($headerSessionName, $headerValue);
     }
 
@@ -320,7 +324,7 @@ abstract class GraphqlRequest
     /**
      * Carrega os cabeçalhos da sessão
      */
-    private function loadHeaders($renewRequest)
+    public function loadHeaders($renewRequest)
     {
         $this->startSession();
 
@@ -518,6 +522,23 @@ QUERY;
                 throw new WrongInstanceRelationException($relation->getRelationName(), $className);
             }
         }
+
+        $relationType = $relation->getType();
+        $paginationInstance = $relation->getPagination();
+
+        // Se for uma relation do tipo paginado
+        // Caso não tenha enviado o objeto relation instanciado, cria uma instância padrão
+        if($relationType === RelationType::PAGINATED){
+            if(is_null($paginationInstance)){
+                $pagination = new ForwardPaginationQuery();
+                $relation->setPagination($pagination);
+            } else {
+                if (!$paginationInstance instanceof ForwardPaginationQuery || !$paginationInstance instanceof BackwardPaginationQuery){
+                    throw new WrongInstancePaginationException($className, $relation->getRelationName());
+                }
+            }
+        }
+
         $this->relations[] = $relation;
     }
 
@@ -544,45 +565,63 @@ QUERY;
      */
     protected function generateSingleQuery(): void
     {
-        $this->gql = GeneratorQuery::generateSingleQuery(
+        $generated = GeneratorQuery::generateSingleQuery(
             $this->queryName,
             $this->variablesNames,
             $this->arguments,
             $this->fields,
             $this->relations
         );
+
+        $this->gql = $generated->gql;
+
+        foreach ($generated->variablesValues as $k => $vv){
+            $this->variablesValues[$k] = $vv;
+        }
     }
 
     /**
      * Gera uma query GraphQL para informações do tipo paginadas obedecendo o padrão Relay
      * @return $this
      */
-    protected function generatePaginatedQuery()
+    public function generatePaginatedQuery($sufix = '')
     {
         $this->gql = new Query($this->queryName);
+
+        $paginationInstance = $this->pagination;
+
+        // Se for uma relation do tipo paginado
+        // Caso não tenha enviado o objeto relation instanciado, cria uma instância padrão
+        if(is_null($paginationInstance)){
+            $this->pagination = new ForwardPaginationQuery();
+        } else {
+            if (!($paginationInstance instanceof ForwardPaginationQuery || $paginationInstance instanceof BackwardPaginationQuery)){
+                throw new WrongInstancePaginationException($this->queryName);
+            }
+        }
 
         $size = $this->pagination->getSize();
         $sizeName = $this->pagination->getSizeName();
         $cursor = $this->pagination->getCursor();
         $cursorName = $this->pagination->getCursorName();
 
-        $this->variablesNames[] = new Variable($sizeName, 'PaginationLimit', true);
-        $this->variablesValues[$sizeName] = $size;
+        $this->variablesNames[] = new Variable($sizeName.$sufix, 'PaginationLimit', true);
+        $this->variablesValues[$sizeName.$sufix] = $size;
 
         if (!is_null($cursor)) {
-            $this->variablesNames[] = new Variable($cursorName, 'String', true);
-            $this->variablesValues[$cursorName] = $cursor;
+            $this->variablesNames[] = new Variable($cursorName.$sufix, 'String', true);
+            $this->variablesValues[$cursorName.$sufix] = $cursor;
 
             // Cria a variável de paginação
             //Para frente: '{first: $first, after: $after}'
             // Para trás:  '{last: $last, before: $before}'
-            $paginationString = '{'.$sizeName.': $'.$sizeName.', '.$cursorName.': $'.$cursorName.'}';
+            $paginationString = '{'.$sizeName.': $'.$sizeName.$sufix.', '.$cursorName.': $'.$cursorName.$sufix.'}';
             $this->arguments = ['pagination' => new RawObject($paginationString)];
         } else {
             // Cria a variável de paginação
             // Para frente: '{first: $first}'
             // Para trás:  '{last: $last}'
-            $paginationString = '{'.$sizeName.': $'.$sizeName.'}';
+            $paginationString = '{'.$sizeName.': $'.$sizeName.$sufix.'}';
             $this->arguments = ['pagination' => new RawObject($paginationString)];
         }
 
@@ -616,5 +655,29 @@ QUERY;
         $this->variablesNames = [];
         $this->variablesValues = [];
         $this->gql = null;
+    }
+
+    public function setQueryName(string $queryName){
+        $this->queryName = $queryName;
+    }
+
+    public function setPagination(PaginationQuery $pagination){
+        $this->pagination = $pagination;
+    }
+
+    public function getGql(): Query{
+        return $this->gql;
+    }
+
+    public function getVariablesNames() {
+        return $this->variablesNames;
+    }
+
+    public function getArguments() {
+        return $this->arguments;
+    }
+
+    public function getVariablesValues() {
+        return $this->variablesValues;
     }
 }
