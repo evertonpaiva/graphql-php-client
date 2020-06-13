@@ -3,6 +3,7 @@
 namespace GraphqlClient\GraphqlQuery;
 
 use GraphQL\Query;
+use stdClass;
 
 class GeneratorQuery
 {
@@ -15,26 +16,57 @@ class GeneratorQuery
      * @param $fields
      * @return Query
      */
-    public static function generateSingleQuery($queryName, $variablesNames, $arguments, $fields, $relations): Query
+    public static function generateSingleQuery($queryName, $variablesNames, $arguments, $fields, $relations)
     {
+        $combinedVariablesValues = [];
+        $combinedVariablesNames = $variablesNames;
+
+        foreach ($relations as $r){
+            // Query simples, não possui paginação nem filtros
+            if($r->getType() === RelationType::SINGLE){
+                $fieldsRelation = new Query($r->getRelationName());
+                $fieldsRelation->setSelectionSet($r->getRelation()->getFields());
+            // Query com paginacao
+            } else {
+                // Povoando o relation com os valores adicionados no relacionamento
+                $relationName = $r->getRelationName();
+                $sufix = (ucfirst($relationName));
+
+                $relation = $r->getRelation();
+
+                $relation->setQueryName($r->getRelationName());
+                $relation->setPagination($r->getPagination());
+                $relation->loadHeaders(false);
+
+                // Adiciona um sufixo no nome das variáveis com o nome do relation
+                // para não duplicar com os nomes de variáveis pré-existentes
+                $relation->generatePaginatedQuery($sufix);
+
+                $fieldsRelation = $relation->getGql();
+                foreach($relation->getVariablesNames() as $v){
+                    $combinedVariablesNames[] = $v;
+                }
+
+                foreach ($relation->getVariablesValues() as $k => $vv) {
+                    $combinedVariablesValues[$k] = $vv;
+                }
+            }
+            $fields[] = $fieldsRelation;
+        }
         $gql = (new Query($queryName))
             ->setVariables(
-                $variablesNames
+                $combinedVariablesNames
             );
 
         $gql->setArguments($arguments);
 
-        $fieldsWithRelations = $fields;
+        $gql->setSelectionSet($fields);
 
-        foreach ($relations as $r){
-            $queryRelation = new Query($r->getRelationName());
-            $queryRelation->setSelectionSet($r->getRelation()->getFields());
-            $fieldsWithRelations[] = $queryRelation;
-        }
+        $generated = new stdClass();
+        $generated->gql = $gql;
+        $generated->variablesValues = $combinedVariablesValues;
 
-        $gql->setSelectionSet($fieldsWithRelations);
-
-        return $gql;
+        return $generated;
     }
 
     /**
