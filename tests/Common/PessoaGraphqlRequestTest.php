@@ -14,7 +14,10 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
         $pessoaGraphqlRequest = new PessoaGraphqlRequest();
 
         // Recupera informações de pessoa por código
-        $pessoa = $pessoaGraphqlRequest->queryGetById(1)->getResults();
+        $pessoa =
+            $pessoaGraphqlRequest
+                ->queryGetById(1)
+                ->getResults();
 
         $expected = new stdClass;
         $expected->idpessoa = 1;
@@ -25,6 +28,22 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
         $expected->containstitucional = 'docker-builder';
 
         $this->assertEquals($expected, $pessoa);
+    }
+
+    public function testPessoaQueryGetByIdRelationDocente()
+    {
+        // Carrega a classe de pessoa
+        $pessoaGraphqlRequest = new PessoaGraphqlRequest();
+
+        // Recupera informações de pessoa por código
+        $pessoa =
+            $pessoaGraphqlRequest
+                ->addRelationDocentes()
+                ->queryGetById(5316)
+                ->getResults();
+
+        $this->assertIsArray($pessoa->docentes->edges);
+        $this->assertIsObject($pessoa->docentes->edges[0]->node);
     }
 
     public function testPessoaQueryList()
