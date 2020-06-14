@@ -2,6 +2,11 @@
 
 namespace GraphqlClient\GraphqlRequest;
 
+/**
+ * Class ConfigRequest
+ * Armazena as configurações globais de GraphqlRequest
+ * @package GraphqlClient\GraphqlRequest
+ */
 abstract class ConfigRequest
 {
     /**
