@@ -2,7 +2,7 @@
 namespace GraphqlClient\Tests;
 
 use GraphqlClient\GraphqlRequest\AuthGraphqlRequest;
-use GraphqlClient\GraphqlRequest\GraphqlRequest;
+use GraphqlClient\GraphqlRequest\ConfigRequest;
 use GraphqlClient\Session\Session;
 use stdClass;
 use GraphqlClient\Exception\HeaderNotDefinedException;
@@ -20,8 +20,8 @@ class AuthGraphqlRequestTest extends GraphqlRequestTest
         $this->expectException(HeaderNotDefinedException::class);
 
         Session::startSession();
-        Session::forget(GraphqlRequest::SESSION_APP_HEADER_NAME);
-        Session::forget(GraphqlRequest::SESSION_USER_HEADER_NAME);
+        Session::forget(ConfigRequest::SESSION_APP_HEADER_NAME);
+        Session::forget(ConfigRequest::SESSION_USER_HEADER_NAME);
 
         // Carrega a classe de autenticação
         $authGraphqlRequest = new AuthGraphqlRequest();
@@ -40,8 +40,8 @@ class AuthGraphqlRequestTest extends GraphqlRequestTest
         $this->expectException(DecodeTokenException::class);
 
         Session::startSession();
-        Session::put(GraphqlRequest::SESSION_APP_HEADER_NAME, 'Bearer xxx');
-        Session::put(GraphqlRequest::SESSION_USER_HEADER_NAME, 'Bearer yyy');
+        Session::put(ConfigRequest::SESSION_APP_HEADER_NAME, 'Bearer xxx');
+        Session::put(ConfigRequest::SESSION_USER_HEADER_NAME, 'Bearer yyy');
 
         // Carrega a classe de autenticação
         $authGraphqlRequest = new AuthGraphqlRequest();
@@ -65,8 +65,8 @@ class AuthGraphqlRequestTest extends GraphqlRequestTest
 
         // Tenta realizar o login na Conta Institucional
         $authGraphqlRequest->loginContaInstitucional($request);
-        $this->assertNotNull(Session::get(GraphqlRequest::SESSION_APP_HEADER_NAME));
-        $this->assertNotNull(Session::get(GraphqlRequest::SESSION_USER_HEADER_NAME));
+        $this->assertNotNull(Session::get(ConfigRequest::SESSION_APP_HEADER_NAME));
+        $this->assertNotNull(Session::get(ConfigRequest::SESSION_USER_HEADER_NAME));
     }
 
     /**

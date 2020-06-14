@@ -18,8 +18,8 @@ class GeneratorQuery
      */
     public static function generateSingleQuery($queryName, $variablesNames, $arguments, $fields, $relations)
     {
-        $combinedVariablesValues = [];
-        $combinedVariablesNames = $variablesNames;
+        $combVarValues = [];
+        $combVarNames = $variablesNames;
 
         foreach ($relations as $r) {
             // Query simples, não possui paginação nem filtros
@@ -44,18 +44,18 @@ class GeneratorQuery
 
                 $fieldsRelation = $relation->getGql();
                 foreach ($relation->getVariablesNames() as $v) {
-                    $combinedVariablesNames[] = $v;
+                    $combVarNames[] = $v;
                 }
 
                 foreach ($relation->getVariablesValues() as $k => $vv) {
-                    $combinedVariablesValues[$k] = $vv;
+                    $combVarValues[$k] = $vv;
                 }
             }
             $fields[] = $fieldsRelation;
         }
         $gql = (new Query($queryName))
             ->setVariables(
-                $combinedVariablesNames
+                $combVarNames
             );
 
         $gql->setArguments($arguments);
@@ -64,7 +64,7 @@ class GeneratorQuery
 
         $generated = new stdClass();
         $generated->gql = $gql;
-        $generated->variablesValues = $combinedVariablesValues;
+        $generated->variablesValues = $combVarValues;
 
         return $generated;
     }

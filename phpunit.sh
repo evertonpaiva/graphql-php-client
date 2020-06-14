@@ -19,6 +19,8 @@ echo -e "\nExecutando testes"
     --testsuite Auth,Feature \
     $@ | tee $PHPUNIT_LOG_FILE
 
+#    --filter testLoginContaInstitucional tests/AuthGraphqlRequestTest.php \
+
 RETORNO=`echo ${PIPESTATUS[0]}`
 
 # Extraindo do arquivo o % de cobertura de código

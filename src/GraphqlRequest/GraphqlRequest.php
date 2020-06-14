@@ -29,51 +29,6 @@ use stdClass;
 class GraphqlRequest
 {
     /**
-     * Variável de ambiente para o ID da Aplicação
-     */
-    const APP_ID_ENV = 'GRAPHQL_APP_ID';
-
-    /**
-     * Variável de ambiente para o KEY da Aplicação
-     */
-    const APP_KEY_ENV = 'GRAPHQL_APP_KEY';
-
-    /**
-     * Variável de ambiente para a URL do servidor GraphQL do ambiente de testes
-     */
-    const GRAPHQL_URL_TESTE = 'http://micro-teste.dds.ufvjm.edu.br/';
-
-    /**
-     * Variável de ambiente para a URL do servidor GraphQL do ambiente de produção
-     */
-    const GRAPHQL_URL_PROD = 'http://micro.dds.ufvjm.edu.br/';
-
-    /**
-     * Variável de ambiente para a URL do servidor GraphQL
-     */
-    const GRAPHQL_ENVNAME_ENV = 'GRAPHQL_ENVNAME';
-
-    /**
-     * Nome do cabeçalho da Aplicação
-     */
-    const APP_HEADER_NAME = 'Application';
-
-    /**
-     * Nome do cabeçalho do Usuário
-     */
-    const USER_HEADER_NAME = 'Authorization';
-
-    /**
-     * Nome do cabeçalho de Aplicação na sessão
-     */
-    const SESSION_APP_HEADER_NAME = 'GRAPHQL_APPLICATION';
-
-    /**
-     * Nome do cabeçalho de Usuário na sessão
-     */
-    const SESSION_USER_HEADER_NAME = 'GRAPHQL_AUTHORIZATION';
-
-    /**
      * @var string Id da aplicação no controle de microsserviços
      */
     protected $appId;
@@ -174,8 +129,8 @@ class GraphqlRequest
         $this->variablesValues = [];
         $this->relations = [];
 
-        $this->graphqlUrlArray['teste'] = self::GRAPHQL_URL_TESTE;
-        $this->graphqlUrlArray['prod'] = self::GRAPHQL_URL_PROD;
+        $this->graphqlUrlArray['teste'] = ConfigRequest::GRAPHQL_URL_TESTE;
+        $this->graphqlUrlArray['prod'] =  ConfigRequest::GRAPHQL_URL_PROD;
 
         // Carrega as variáveis de ambiente
         $this->loadEnvVars();
@@ -222,8 +177,8 @@ class GraphqlRequest
      */
     protected function checkAppHeader()
     {
-        if (is_null($this->headers) || !property_exists($this->headers, self::APP_HEADER_NAME)) {
-            throw new HeaderNotDefinedException(self::APP_HEADER_NAME);
+        if (is_null($this->headers) || !property_exists($this->headers, ConfigRequest::APP_HEADER_NAME)) {
+            throw new HeaderNotDefinedException(ConfigRequest::APP_HEADER_NAME);
         }
     }
 
@@ -233,8 +188,8 @@ class GraphqlRequest
      */
     protected function checkUserHeader()
     {
-        if (is_null($this->headers) || !property_exists($this->headers, self::USER_HEADER_NAME)) {
-            throw new HeaderNotDefinedException(self::USER_HEADER_NAME);
+        if (is_null($this->headers) || !property_exists($this->headers, ConfigRequest::USER_HEADER_NAME)) {
+            throw new HeaderNotDefinedException(ConfigRequest::USER_HEADER_NAME);
         }
     }
 
@@ -263,7 +218,7 @@ class GraphqlRequest
             // Token está proximo de expirar
             // Renovando o token
             if ($decoded->proximoExpirar && $canRenew) {
-                if ($type === self::APP_HEADER_NAME) {
+                if ($type === ConfigRequest::APP_HEADER_NAME) {
                     $this->renewApp();
                 } else {
                     $this->renewUser();
@@ -281,10 +236,10 @@ class GraphqlRequest
      */
     private function loadEnvVars()
     {
-        $this->appId = $this->getEnvValue(self::APP_ID_ENV);
-        $this->appKey = $this->getEnvValue(self::APP_KEY_ENV);
+        $this->appId = $this->getEnvValue(ConfigRequest::APP_ID_ENV);
+        $this->appKey = $this->getEnvValue(ConfigRequest::APP_KEY_ENV);
 
-        $this->graphqlEnv = $this->getEnvValue(self::GRAPHQL_ENVNAME_ENV);
+        $this->graphqlEnv = $this->getEnvValue(ConfigRequest::GRAPHQL_ENVNAME_ENV);
         $this->graphqlUrl = $this->graphqlUrlArray[$this->graphqlEnv];
     }
 
@@ -317,8 +272,16 @@ class GraphqlRequest
      */
     protected function storeHeaders($headers)
     {
-        $this->storeHeader(self::SESSION_APP_HEADER_NAME, $headers->{self::APP_HEADER_NAME}, self::APP_HEADER_NAME);
-        $this->storeHeader(self::SESSION_USER_HEADER_NAME, $headers->{self::USER_HEADER_NAME}, self::USER_HEADER_NAME);
+        $this->storeHeader(
+            ConfigRequest::SESSION_APP_HEADER_NAME,
+            $headers->{ConfigRequest::APP_HEADER_NAME},
+            ConfigRequest::APP_HEADER_NAME
+        );
+        $this->storeHeader(
+            ConfigRequest::SESSION_USER_HEADER_NAME,
+            $headers->{ ConfigRequest::USER_HEADER_NAME},
+            ConfigRequest::USER_HEADER_NAME
+        );
     }
 
     /**
@@ -334,24 +297,24 @@ class GraphqlRequest
         // renovação de token novamente
         $canRenew = !$renewRequest;
 
-        if (!is_null(Session::get(self::SESSION_APP_HEADER_NAME))) {
-            $appHeader = Session::get(self::SESSION_APP_HEADER_NAME);
+        if (!is_null(Session::get(ConfigRequest::SESSION_APP_HEADER_NAME))) {
+            $appHeader = Session::get(ConfigRequest::SESSION_APP_HEADER_NAME);
 
-            $decoded = $this->checkToken($appHeader, self::APP_HEADER_NAME, $canRenew);
+            $decoded = $this->checkToken($appHeader, ConfigRequest::APP_HEADER_NAME, $canRenew);
 
-            $this->headers->{self::APP_HEADER_NAME} = new stdClass();
-            $this->headers->{self::APP_HEADER_NAME}->bearer = $appHeader;
-            $this->headers->{self::APP_HEADER_NAME}->payload = $decoded;
+            $this->headers->{ ConfigRequest::APP_HEADER_NAME} = new stdClass();
+            $this->headers->{ ConfigRequest::APP_HEADER_NAME}->bearer = $appHeader;
+            $this->headers->{ ConfigRequest::APP_HEADER_NAME}->payload = $decoded;
         }
 
-        if (!is_null(Session::get(self::SESSION_USER_HEADER_NAME))) {
-            $userHeader = Session::get(self::SESSION_USER_HEADER_NAME);
+        if (!is_null(Session::get(ConfigRequest::SESSION_USER_HEADER_NAME))) {
+            $userHeader = Session::get(ConfigRequest::SESSION_USER_HEADER_NAME);
 
-            $decoded = $this->checkToken($userHeader, self::USER_HEADER_NAME, $canRenew);
+            $decoded = $this->checkToken($userHeader, ConfigRequest::USER_HEADER_NAME, $canRenew);
 
-            $this->headers->{self::USER_HEADER_NAME} = new stdClass();
-            $this->headers->{self::USER_HEADER_NAME}->bearer = $userHeader;
-            $this->headers->{self::USER_HEADER_NAME}->payload = $decoded;
+            $this->headers->{ ConfigRequest::USER_HEADER_NAME} = new stdClass();
+            $this->headers->{ ConfigRequest::USER_HEADER_NAME}->bearer = $userHeader;
+            $this->headers->{ ConfigRequest::USER_HEADER_NAME}->payload = $decoded;
         }
     }
 
@@ -362,12 +325,12 @@ class GraphqlRequest
     {
         $this->startSession();
 
-        if (!is_null(Session::get(self::SESSION_APP_HEADER_NAME))) {
-            Session::forget(self::SESSION_APP_HEADER_NAME);
+        if (!is_null(Session::get(ConfigRequest::SESSION_APP_HEADER_NAME))) {
+            Session::forget(ConfigRequest::SESSION_APP_HEADER_NAME);
         }
 
-        if (!is_null(Session::get(self::SESSION_USER_HEADER_NAME))) {
-            Session::forget(self::SESSION_USER_HEADER_NAME);
+        if (!is_null(Session::get(ConfigRequest::SESSION_USER_HEADER_NAME))) {
+            Session::forget(ConfigRequest::SESSION_USER_HEADER_NAME);
         }
     }
 
@@ -382,12 +345,14 @@ class GraphqlRequest
         // Caso os cabeçalhos tenham sido enviados, contruindo o cliente GraphQL com as informações de cabeçalho
         // Cabeçalhos foram enviados e
         // Enviou cabeçalho da aplicação
-        if (is_object($this->headers) && property_exists($this->headers, self::APP_HEADER_NAME)) {
+        if (is_object($this->headers) && property_exists($this->headers, ConfigRequest::APP_HEADER_NAME)) {
             $headersConstructor = [];
-            $headersConstructor[self::APP_HEADER_NAME] = $this->headers->{self::APP_HEADER_NAME}->bearer;
+            $headersConstructor[ ConfigRequest::APP_HEADER_NAME] =
+                $this->headers->{ ConfigRequest::APP_HEADER_NAME}->bearer;
             // Enviou cabeçalho do usuário
-            if (property_exists($this->headers, self::USER_HEADER_NAME)) {
-                $headersConstructor[self::USER_HEADER_NAME] = $this->headers->{self::USER_HEADER_NAME}->bearer;
+            if (property_exists($this->headers, ConfigRequest::USER_HEADER_NAME)) {
+                $headersConstructor[ ConfigRequest::USER_HEADER_NAME] =
+                    $this->headers->{ ConfigRequest::USER_HEADER_NAME}->bearer;
             }
 
             // Criando a instância do client graphql e enviando os cabeçalhos fornecidos
@@ -457,7 +422,7 @@ QUERY;
         $header = 'Bearer '.$token;
 
         //Armazenar o novo token gerado
-        $this->storeHeader(self::SESSION_USER_HEADER_NAME, $header, self::USER_HEADER_NAME);
+        $this->storeHeader(ConfigRequest::SESSION_USER_HEADER_NAME, $header, ConfigRequest::USER_HEADER_NAME);
 
         return $results->getResults()->data->renewUser;
     }
@@ -487,7 +452,7 @@ QUERY;
         $header = 'Bearer '.$token;
 
         //Armazenar o novo token gerado
-        $this->storeHeader(self::SESSION_APP_HEADER_NAME, $header, self::APP_HEADER_NAME);
+        $this->storeHeader(ConfigRequest::SESSION_APP_HEADER_NAME, $header, ConfigRequest::APP_HEADER_NAME);
         return $results->getResults()->data->renewApp;
     }
 
