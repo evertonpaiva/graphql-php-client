@@ -589,8 +589,6 @@ QUERY;
      */
     public function generatePaginatedQuery($sufix = '')
     {
-        $this->gql = new Query($this->queryName);
-
         $paginationInstance = $this->pagination;
 
         // Se for uma relation do tipo paginado
@@ -621,14 +619,49 @@ QUERY;
             //Para frente: '{first: $first, after: $after}'
             // Para trás:  '{last: $last, before: $before}'
             $paginationString = '{'.$sizeName.': $'.$sizeName.$sufix.', '.$cursorName.': $'.$cursorName.$sufix.'}';
-            $this->arguments = ['pagination' => new RawObject($paginationString)];
+            $this->arguments['pagination'] = new RawObject($paginationString);
         } else {
             // Cria a variável de paginação
             // Para frente: '{first: $first}'
             // Para trás:  '{last: $last}'
             $paginationString = '{'.$sizeName.': $'.$sizeName.$sufix.'}';
-            $this->arguments = ['pagination' => new RawObject($paginationString)];
+            $this->arguments['pagination'] = new RawObject($paginationString);
         }
+
+        foreach ($this->relations as $r) {
+            // Query simples, não possui paginação nem filtros
+            if ($r->getType() === RelationType::SINGLE) {
+                $fieldsRelation = new Query($r->getRelationName());
+                $fieldsRelation->setSelectionSet($r->getRelation()->getFields());
+            // Query com paginacao
+            } else {
+                // Povoando o relation com os valores adicionados no relacionamento
+                $relationName = $r->getRelationName();
+                $sufix = (ucfirst($relationName));
+
+                $relation = $r->getRelation();
+
+                $relation->setQueryName($r->getRelationName());
+                $relation->setPagination($r->getPagination());
+                $relation->loadHeaders(false);
+
+                // Adiciona um sufixo no nome das variáveis com o nome do relation
+                // para não duplicar com os nomes de variáveis pré-existentes
+                $relation->generatePaginatedQuery($sufix);
+
+                $fieldsRelation = $relation->getGql();
+                foreach ($relation->getVariablesNames() as $v) {
+                    $this->variablesNames[] = $v;
+                }
+
+                foreach ($relation->getVariablesValues() as $k => $vv) {
+                    $this->variablesValues[$k] = $vv;
+                }
+            }
+            $this->fields[] = $fieldsRelation;
+        }
+
+        $this->gql = new Query($this->queryName);
 
         $this->gql->setVariables($this->variablesNames);
 
