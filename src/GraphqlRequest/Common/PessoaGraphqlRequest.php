@@ -54,6 +54,21 @@ class PessoaGraphqlRequest extends GraphqlRequest
         return $this;
     }
 
+    public function addRelationRaca($raca = null, $pagination = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::SINGLE,
+                'objRaca',
+                RacaGraphqlRequest::class,
+                $raca,
+                $pagination
+            )
+        );
+
+        return $this;
+    }
+
     public function addRelationDocentes($docente = null, $pagination = null, $filters = null)
     {
         $this->addRelation(
@@ -75,11 +90,17 @@ class PessoaGraphqlRequest extends GraphqlRequest
      * @param PaginationQuery $pagination informações de paginação
      * @return PessoaGraphqlRequest
      */
-    public function queryList($pagination = null)
+    public function queryList($pagination = null, $nome = null)
     {
         $this->clearQueryObjects();
         $this->queryName = 'commonPessoas';
         $this->pagination = $pagination;
+
+        if (!is_null($nome)) {
+            $this->variablesNames[] = new Variable('nome', 'String', true);
+            $this->variablesValues['nome'] = $nome;
+            $this->arguments = ['nome' => '$nome'];
+        }
 
         return $this->generatePaginatedQuery();
     }
