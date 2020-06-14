@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="Auth">
+            <file>tests/AuthGraphqlRequestTest.php</file>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory suffix='.php'>tests/Ensino</directory>
+            <directory suffix='.php'>tests/Common</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <ini name="session.use_cookies" value="0" />
+        <ini name="session.use_only_cookies" value="0" />
+        <ini name="session.use_trans_sid" value="0" />
+        <ini name="session.cache_limiter" value="" />
+    </php>
+    <logging>
+        <log type="coverage-html" target="./coverage" lowUpperBound="35"
+             highLowerBound="70"/>
+    </logging>
+</phpunit>

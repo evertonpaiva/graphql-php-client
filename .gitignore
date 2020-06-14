@@ -1,3 +1,12 @@
 # Ignorando pasta do editor PHPStorm
 .idea
 vendor/
+
+# Arquivo local de variáveis de ambiente
+.env
+
+coverage/*
+!coverage/.gitkeep
+
+# Cache do PHPUnit
+.phpunit.result.cache

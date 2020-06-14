@@ -6,10 +6,10 @@ use GraphQL\Query;
 use GraphQL\RawObject;
 
 /**
+ * Class AuthGraphqlRequest
  * Requisições GraphQL de Autenticação
  *
- * Class AuthGraphqlRequest
- * @package App\Http\GraphqlRequests
+ * @package GraphqlClient\GraphqlRequest
  */
 class AuthGraphqlRequest extends GraphqlRequest
 {
@@ -44,7 +44,8 @@ class AuthGraphqlRequest extends GraphqlRequest
                 ]
             );
 
-        $results = $this->getClient(AuthType::NO_AUTH)->runQuery($gql);
+        $results = $this->getClient(AuthType::NO_AUTH)
+            ->runQuery($gql);
 
         // Autenticacao passou, retornou cabecalhos de app e user
         $headers = $results->getResults()->data->generateTokens->headers;
@@ -75,7 +76,8 @@ class AuthGraphqlRequest extends GraphqlRequest
                 ]
             );
 
-        $results = $this->getClient(AuthType::APP_USER_AUTH)->runQuery($gql);
+        $results = $this->getClient(AuthType::APP_USER_AUTH)
+            ->runQuery($gql);
         return $results->getResults()->data->me;
     }
 }

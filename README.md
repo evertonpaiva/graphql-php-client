@@ -34,20 +34,20 @@ No arquivo `composer.json` do seu projeto, adicione os seguintes itens:
 Na entrada `repositories`
 
 ```json
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://git.dds.ufvjm.edu.br/micro/graphql-client.git"
-        }
-    ],
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://git.dds.ufvjm.edu.br/micro/graphql-client.git"
+    }
+],
 ```
 
 Na entrada `require`
 
 ```json
-    "require": {
-        "micro/graphql-client": "dev-master",
-    },
+"require": {
+    "micro/graphql-client": "dev-master",
+},
 ```
 
 ### Definir variáveis de ambiente
