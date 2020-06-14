@@ -2,9 +2,8 @@
 namespace GraphqlClient\Tests\Ensino;
 
 use GraphqlClient\GraphqlRequest\Ensino\DepartamentoGraphqlRequest;
-use GraphqlClient\GraphqlRequest\ForwardPaginationQuery;
+use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
 use GraphqlClient\Tests\GraphqlRequestTest;
-use GraphqlClient\GraphqlRequest\Ensino\DisciplinaGraphqlRequest;
 use stdClass;
 
 class DepartamentoGraphqlRequestTest extends GraphqlRequestTest
@@ -25,15 +24,15 @@ class DepartamentoGraphqlRequestTest extends GraphqlRequestTest
         $this->assertEquals($expected, $departamento);
     }
 
-    public function testDisciplinaQueryList()
+    public function testDepartamentoQueryList()
     {
         // Carrega a classe de disciplina
-        $departamentoGraphqlRequest = new DisciplinaGraphqlRequest();
+        $departamentoGraphqlRequest = new DepartamentoGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3);
-        $disciplinas = $departamentoGraphqlRequest->queryList($pagination)->getResults();
+        $departamentos = $departamentoGraphqlRequest->queryList($pagination)->getResults();
 
-        $this->assertIsArray($disciplinas->edges);
-        $this->assertIsObject($disciplinas->pageInfo);
+        $this->assertIsArray($departamentos->edges);
+        $this->assertIsObject($departamentos->pageInfo);
     }
 }

@@ -5,7 +5,7 @@ namespace GraphqlClient\GraphqlRequest\Ensino;
 use GraphQL\Variable;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
-use GraphqlClient\GraphqlRequest\PaginationQuery;
+use GraphqlClient\GraphqlQuery\PaginationQuery;
 
 /**
  * Class AuthGraphqlRequest

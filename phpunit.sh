@@ -12,7 +12,15 @@ start_time=`date +%s`
 # Executando os testes, jogando saida dos testes em arquivo temporario
 # Guardando o retorno do PHPUnit em variavel
 echo -e "\nExecutando testes"
-./vendor/bin/phpunit --configuration "$CONFIGURATION_FILE" --coverage-text --colors=never $@ | tee $PHPUNIT_LOG_FILE
+./vendor/bin/phpunit \
+    --configuration "$CONFIGURATION_FILE" \
+    --coverage-text \
+    --colors=never \
+    --testsuite Auth,Feature \
+    $@ | tee $PHPUNIT_LOG_FILE
+
+#    --filter testLoginContaInstitucional tests/AuthGraphqlRequestTest.php \
+
 RETORNO=`echo ${PIPESTATUS[0]}`
 
 # Extraindo do arquivo o % de cobertura de código

@@ -1,8 +1,9 @@
 <?php
 namespace GraphqlClient\Tests\Ensino;
 
-use GraphqlClient\GraphqlRequest\BackwardPaginationQuery;
-use GraphqlClient\GraphqlRequest\ForwardPaginationQuery;
+use GraphqlClient\Exception\WrongInstanceRelationException;
+use GraphqlClient\GraphqlQuery\BackwardPaginationQuery;
+use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
 use GraphqlClient\Tests\GraphqlRequestTest;
 use GraphqlClient\GraphqlRequest\Ensino\DisciplinaGraphqlRequest;
 use stdClass;
@@ -30,16 +31,57 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertEquals($expected, $disciplina);
     }
 
+    public function testDisciplinaQueryGetByIdDepartamento()
+    {
+        // Carrega a classe de disciplina
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
+
+        // Recupera informações de disciplina por código
+        $disciplina =
+            $disciplinaGraphqlRequest
+                ->addRelationDepartamento()
+                ->queryGetById('COM001')
+                ->getResults();
+
+        $expected = new stdClass;
+        $expected->disciplina = 'COM001';
+        $expected->nome = 'ALGORITMOS E ESTRUTURA DE DADOS I';
+        $expected->iddepto = 'DCO';
+        $expected->creditostotal = 5;
+        $expected->cargahorariatotal = 75;
+        $expected->objDepartamento = new stdClass();
+        $expected->objDepartamento->iddepto = 'DCO';
+        $expected->objDepartamento->depto = 'COM';
+        $expected->objDepartamento->nome = 'DEPARTAMENTO DE COMPUTAÇÃO';
+
+        $this->assertEquals($expected, $disciplina);
+    }
+
+    public function testWrongRelationException()
+    {
+        // Tipo de exceção esperada
+        $this->expectException(WrongInstanceRelationException::class);
+
+        // Carrega a classe de disciplina
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
+
+        // Carrega disciplina com relacionamento incorreto
+        $disciplinaGraphqlRequest
+            ->addRelationDepartamento($disciplinaGraphqlRequest)
+            ->queryGetById('COM001')
+            ->getResults();
+    }
+
     /**
      * Lista disciplinas
      */
     public function testDisciplinaQueryList()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3);
-        $disciplinas = $disciplinaGrapqhlRequest->queryList($pagination)->getResults();
+        $disciplinas = $disciplinaGraphqlRequest->queryList($pagination)->getResults();
 
         $this->assertIsArray($disciplinas->edges);
         $this->assertIsObject($disciplinas->pageInfo);
@@ -51,10 +93,10 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
     public function testDisciplinaQueryListCursor()
     {
         // Carrega a classe de disciplina
-        $disciplinaGrapqhlRequest = new DisciplinaGraphqlRequest();
+        $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3, 'WyIxMzY4MyAgICAgICAgICAgICAgICJd');
-        $disciplinas = $disciplinaGrapqhlRequest->queryList($pagination)->getResults();
+        $disciplinas = $disciplinaGraphqlRequest->queryList($pagination)->getResults();
 
         $this->assertIsArray($disciplinas->edges);
         $this->assertIsObject($disciplinas->pageInfo);

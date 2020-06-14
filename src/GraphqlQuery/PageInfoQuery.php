@@ -1,6 +1,6 @@
 <?php
 
-namespace GraphqlClient\GraphqlRequest;
+namespace GraphqlClient\GraphqlQuery;
 
 use GraphQL\Query;
 
