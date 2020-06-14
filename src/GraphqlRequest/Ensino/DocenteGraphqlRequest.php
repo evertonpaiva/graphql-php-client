@@ -3,7 +3,10 @@
 namespace GraphqlClient\GraphqlRequest\Ensino;
 
 use GraphQL\Variable;
+use GraphqlClient\GraphqlQuery\RelationQuery;
+use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\GraphqlRequest\AuthType;
+use GraphqlClient\GraphqlRequest\Ensino\DepartamentoGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
@@ -62,5 +65,20 @@ class DocenteGraphqlRequest extends GraphqlRequest
         $this->pagination = $pagination;
 
         return $this->generatePaginatedQuery();
+    }
+
+    public function addRelationDepartamento($departamento = null, $pagination = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::SINGLE,
+                'objDepartamento',
+                DepartamentoGraphqlRequest::class,
+                $departamento,
+                $pagination
+            )
+        );
+
+        return $this;
     }
 }
