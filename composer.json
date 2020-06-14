@@ -1,6 +1,11 @@
 {
     "name": "ufvjm/graphql-client",
     "description": "Cliente GraphQL para realizar requisições para a API GraphQL da UFVJM.",
+    "keywords": [
+        "graphql",
+        "client",
+        "ufvjm"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -34,5 +39,5 @@
             "GraphqlClient\\Tests\\": "tests/"
         }
     },
-    "version": "0.0.1"
+    "version": "0.0.2"
 }

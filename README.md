@@ -4,53 +4,56 @@ Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
 
 ## Sumário
 
-* [Client GraphQL - UFVJM](#client-graphql---ufvjm)
-  * [Sumário](#sumário)
-  * [Utilização da biblioteca](#utilização-da-biblioteca)
-     * [Pré-requisitos](#pré-requisitos)
-     * [Adicionar biblioteca como dependência](#adicionar-biblioteca-como-dependência)
-     * [Definir variáveis de ambiente](#definir-variáveis-de-ambiente)
-        * [Client Id e Client Key da Aplicação](#client-id-e-client-key-da-aplicação)
-        * [Nome do ambiente](#nome-do-ambiente)
-     * [Integrando a autenticação](#integrando-a-autenticação)
-  * [Contribuindo para a biblioteca](#contribuindo-para-a-biblioteca)
-     * [Repositório](#repositório)
-     * [Ferramentas de lint](#ferramentas-de-lint)
-  * [Documentação](#documentação)
-  * [Equipe Responsável](#equipe-responsável)
-  * [Parceiros](#parceiros)
+   * [Client GraphQL - UFVJM](#client-graphql---ufvjm)
+      * [Sumário](#sumário)
+      * [Utilização da biblioteca](#utilização-da-biblioteca)
+         * [Pré-requisitos](#pré-requisitos)
+         * [Adicionar biblioteca como dependência](#adicionar-biblioteca-como-dependência)
+         * [Definir variáveis de ambiente](#definir-variáveis-de-ambiente)
+            * [Client Id e Client Key da Aplicação](#client-id-e-client-key-da-aplicação)
+            * [Nome do ambiente](#nome-do-ambiente)
+         * [Autenticação na API](#autenticação-na-api)
+         * [Integrando a autenticação](#integrando-a-autenticação)
+         * [Exemplos de consultas](#exemplos-de-consultas)
+            * [Busca por código](#busca-por-código)
+            * [Busca de informações paginadas](#busca-de-informações-paginadas)
+            * [Carregando relacionamentos](#carregando-relacionamentos)
+      * [Contribuindo para a biblioteca](#contribuindo-para-a-biblioteca)
+         * [Repositório](#repositório)
+         * [Ferramentas de lint](#ferramentas-de-lint)
+      * [Documentação](#documentação)
+      * [Equipe Responsável](#equipe-responsável)
+      * [Parceiros](#parceiros)
 
 ## Utilização da biblioteca
 
 ### Pré-requisitos
 
-* PHP 7.0 ou superior
+* PHP 7.1 ou superior
 * [Composer](https://getcomposer.org/) instalado e configurado
+* Aplicação cadastrada no [Portal do Desenvolvedor](https://portal-dev-teste.dds.ufvjm.edu.br/) da UFVJM 
 
 ### Adicionar biblioteca como dependência
 
-No arquivo `composer.json` do seu projeto, adicione os seguintes itens:
+Na raíz do seu projeto, execute o **composer**
 
-Na entrada `repositories`
+* Via composer diretamente:
 
-```json
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://git.dds.ufvjm.edu.br/micro/graphql-client.git"
-    }
-],
+```bash
+composer require ufvjm/graphql-client
 ```
 
-Na entrada `require`
+* Ou via container docker:
 
-```json
-"require": {
-    "micro/graphql-client": "dev-master",
-},
+```bash
+docker run --rm --interactive --tty \
+    --volume $PWD:/app \
+    composer require ufvjm/graphql-client
 ```
 
 ### Definir variáveis de ambiente
+
+Informar corretamente os valores abaixo para as variáveis de ambiente:
 
 #### Client Id e Client Key da Aplicação
 
@@ -80,6 +83,33 @@ AINDA NÃO DISPONIBILIZADO
 ```
 
 Após alterações no arquivo **.env**, o container web deve ser reiniciado para recarregar as alterações:
+
+### Autenticação na API
+
+A autenticação é controlado por 2 tokens:
+
+* **Token de Aplicativo**: aplicativo cadastrado e autorizado no Portal da API.
+* **Token de Usuário**: usuário logado em sua Conta Institucional.
+
+![Query para gerar os tokens](docs/img/arquitetura-gerar-tokens.png)
+
+A Autenticação do aplicativo é realizada fornecendo o appId e appKey fornecidos quando você realiza o cadastro 
+do seu aplicativo no Portal da API. A autenticação do usuário é relizada fornecendo o usuário e senha da 
+Conta Institucional da UFVJM.
+
+Quando a query de Autenticação é executada, serão retornados 2 tokens:
+
+* um token de autenticação válido por 24 horas para o aplicativo
+* e um token de usuário válido por 3 horas.
+
+Essa biblioteca armazena o token retornado na sessão PHP e, a cada nova requisição esses tokens serão utilizados. 
+Antes de cada requisição a biblioteca testa a validade do token e, quando for o caso, 
+realiza sua renovação através de uma requisição de renovação.
+
+![Requisições com autenticação](docs/img/arquitetura-consulta-com-autenticacao.png)
+
+Os tokens são do tipo JWT (JSON Web Token), o artigo 
+[O que é JSON Web Token?](https://www.devmedia.com.br/como-o-jwt-funciona/40265) explica o seu funcionamento. 
 
 ### Integrando a autenticação
 
@@ -124,6 +154,58 @@ try {
     // A mensagem de erro foi carregada, tratar para disponibilizar na interface para o usuário do sistema
 }
 
+```
+
+### Exemplos de consultas
+
+Nos exemplos listados abaixo, a autenticação já foi realizado e os tokens de usuário e aplicação já estão salvos na sessão:
+
+#### Busca por código
+
+Buscando a disciplina de código **COM001**
+
+```php
+// Carrega a classe de disciplina
+$disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
+
+// Recupera informações de disciplina por código
+$disciplina = 
+    $disciplinaGraphqlRequest->queryGetById('COM001')
+    ->getResults();
+```
+
+#### Busca de informações paginadas
+
+Busca uma **lista** de **até 3 disciplinas**
+
+```php
+// Carrega a classe de disciplina
+$disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
+
+// Carrega a paginação solicitando até 3 registros
+$pagination = new ForwardPaginationQuery(3);
+
+// Recupera as informações de disciplinas
+$disciplinas = 
+    $disciplinaGraphqlRequest
+    ->queryList($pagination)
+    ->getResults();
+```
+
+#### Carregando relacionamentos
+
+Busca a **disciplina** de código **COM001** e carrega o relacionamento **departamento**
+
+```php
+// Carrega a classe de disciplina
+$disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
+
+// Recupera informações de disciplina por código
+$disciplina =
+    $disciplinaGraphqlRequest
+        ->addRelationDepartamento()
+        ->queryGetById('COM001')
+        ->getResults();
 ```
 
 ## Contribuindo para a biblioteca
