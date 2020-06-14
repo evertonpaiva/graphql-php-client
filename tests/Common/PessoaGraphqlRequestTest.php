@@ -77,4 +77,35 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsArray($pessoas->edges);
         $this->assertIsObject($pessoas->pageInfo);
     }
+
+    public function testPessoaQueryListFilterNome()
+    {
+        // Carrega a classe de pessoa
+        $pessoaGraphqlRequest = new PessoaGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(3);
+        $pessoas = $pessoaGraphqlRequest->queryList($pagination, 'JOÃO')->getResults();
+
+        $this->assertIsArray($pessoas->edges);
+        $this->assertIsObject($pessoas->pageInfo);
+    }
+
+    public function testPessoaQueryListAddRelations()
+    {
+        // Carrega a classe de pessoa
+        $pessoaGraphqlRequest = new PessoaGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(3);
+        $pessoas =
+            $pessoaGraphqlRequest
+                ->addRelationRaca()
+                ->addRelationDocentes()
+                ->queryList($pagination)
+                ->getResults();
+
+        $this->assertIsArray($pessoas->edges);
+        $this->assertIsObject($pessoas->pageInfo);
+        $this->assertIsObject($pessoas->edges[0]->node->objRaca);
+        $this->assertIsArray($pessoas->edges[0]->node->docentes->edges);
+    }
 }
