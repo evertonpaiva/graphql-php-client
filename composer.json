@@ -1,5 +1,5 @@
 {
-    "name": "micro/graphql-client",
+    "name": "ufvjm/graphql-client",
     "description": "Cliente GraphQL para realizar requisições para a API GraphQL da UFVJM.",
     "type": "library",
     "license": "MIT",
@@ -7,6 +7,10 @@
         {
             "name": "Divisão de Desenvolvimento de Sistemas",
             "email": "devsis@ufvjm.edu.br"
+        },
+        {
+            "name": "Éverton de Oliveira Paiva",
+            "email": "everton.paiva@ufvjm.edu.br"
         }
     ],
     "require": {
@@ -30,5 +34,5 @@
             "GraphqlClient\\Tests\\": "tests/"
         }
     },
-    "version": "0.0.2"
+    "version": "0.0.1"
 }
