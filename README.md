@@ -235,6 +235,12 @@ Iniciando o container
 ./run.sh
 ```
 
+Atualizar as bibliotecas
+
+```bash
+./update.sh
+```
+
 Executando as validações
 
 ```bash
