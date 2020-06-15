@@ -1,3 +1,10 @@
+[![Pipeline](https://git.dds.ufvjm.edu.br/ufvjm/graphql-php-client/badges/test/pipeline.svg)](//git.dds.ufvjm.edu.br/ufvjm/graphql-php-client/pipelines)
+[![Coverage](https://git.dds.ufvjm.edu.br/ufvjm/graphql-php-client/badges/test/coverage.svg)](//git.dds.ufvjm.edu.br/ufvjm/graphql-php-client)
+[![Latest Stable Version](https://poser.pugx.org/ufvjm/graphql-client/v)](//packagist.org/packages/ufvjm/graphql-client)
+[![Total Downloads](https://poser.pugx.org/ufvjm/graphql-client/downloads)](//packagist.org/packages/ufvjm/graphql-client)
+[![Latest Unstable Version](https://poser.pugx.org/ufvjm/graphql-client/v/unstable)](//packagist.org/packages/ufvjm/graphql-client)
+[![License](https://poser.pugx.org/ufvjm/graphql-client/license)](//packagist.org/packages/ufvjm/graphql-client)
+
 # Client GraphQL - UFVJM
 
 Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
