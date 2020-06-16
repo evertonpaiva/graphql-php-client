@@ -9,11 +9,11 @@ docker-compose down
 
 echo -e "\nInstalando dependências localmente"
 docker run --rm --interactive --tty \
-            --volume "${(PWD)}":/app \
+            --volume "$PWD":/app \
             $COMPOSER_IMG composer install
 
 echo -e "\nCorrigindo permissões na pasta da aplicação"
-sudo chown "${USER}":www-data -R .
+sudo chown "$USER":www-data -R .
 
 echo -e "\nIniciando o container"
 docker-compose up -d
