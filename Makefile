@@ -20,16 +20,16 @@ run:
 	./run.sh
 
 test:
-	docker exec -it graphql-client bash ./phpunit.sh
+	docker exec -it graphql-client bash phpunit.sh
 
 lint-check:
-	docker exec -it graphql-client bash ./phpcs.sh
+	docker exec -it graphql-client bash phpcs.sh
 
 lint-fix:
-	docker exec -it graphql-client bash ./phpcbf.sh
+	docker exec -it graphql-client bash phpcbf.sh
 
 lint-md:
 	docker exec -it graphql-client bash phpmd.sh
 
 security-check:
-	docker exec -it graphql-client bash ./security-check.sh
+	docker exec -it graphql-client bash security-check.sh
