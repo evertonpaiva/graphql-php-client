@@ -20,14 +20,19 @@ abstract class ConfigRequest
     const APP_KEY_ENV = 'GRAPHQL_APP_KEY';
 
     /**
+     * Variável de ambiente para a URL do servidor GraphQL do ambiente local
+     */
+    const GRAPHQL_URL_LOCAL = 'http://192.168.1.106:30000/';
+
+    /**
      * Variável de ambiente para a URL do servidor GraphQL do ambiente de testes
      */
-    const GRAPHQL_URL_TESTE = 'http://micro-teste.dds.ufvjm.edu.br/';
+    const GRAPHQL_URL_TESTE = 'https://micro-teste.dds.ufvjm.edu.br/';
 
     /**
      * Variável de ambiente para a URL do servidor GraphQL do ambiente de produção
      */
-    const GRAPHQL_URL_PROD = 'http://micro.dds.ufvjm.edu.br/';
+    const GRAPHQL_URL_PROD = 'https://micro.dds.ufvjm.edu.br/';
 
     /**
      * Variável de ambiente para a URL do servidor GraphQL
