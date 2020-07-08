@@ -129,6 +129,7 @@ class GraphqlRequest
         $this->variablesValues = [];
         $this->relations = [];
 
+        $this->graphqlUrlArray['local'] = ConfigRequest::GRAPHQL_URL_LOCAL;
         $this->graphqlUrlArray['teste'] = ConfigRequest::GRAPHQL_URL_TESTE;
         $this->graphqlUrlArray['prod'] =  ConfigRequest::GRAPHQL_URL_PROD;
 
