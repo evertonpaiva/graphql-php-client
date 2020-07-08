@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "gmostafa/php-graphql-client": "^1.4",
+        "gmostafa/php-graphql-client": "^1.6",
         "firebase/php-jwt": "5.*"
     },
     "require-dev": {
