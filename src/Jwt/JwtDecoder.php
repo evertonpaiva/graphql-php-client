@@ -16,23 +16,41 @@ use DateTime;
 class JwtDecoder
 {
 
+    const AUTORIZACAO_PUB_KEY_LOCAL = <<<EOD
+-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAyBXXr3slY7l6HzB0Q1Z1
+mhPMm4LYXe8UL1OSoQKTDepeojcKWCeHo1zhlZySJ4NEFM32mYMMwhoV95YlQJQU
+gsBiq/NOlCEx8oCGDMKjrBOqlab/S/tprQuGZ5VwVOVvTacCRbaa/HpQNaOQhRS6
+E2X/jizRZpSjt8vk7i2VNqaexWNbKk99vEGrY9iqmXijZtRGf0awjjAsGrpVhOwy
++qvf5pWkA/DfrkL1a+Jp9dKdYEJvnAhy0FX8KJsjPbOkuUxey1OT0fI65229RxKw
+gr5yxIJZ/swfFufzQ2HXaKJIMwTHWqdR91AYyqo6KFg/uwkw12544d99hv8gv4QJ
+pDbRIfwipl1dLbdKVFzlr98Iyc/hEnCqtio9g8zAyb4dAEPJA2/AweI+Zfo1Au8S
+bSq5GE7ONiGizrxM8GnkT4HCbGkTD+74nz5v53/z25w3d5V/VjEfkpLWRjHyB8rl
+7VxOdcJiI/uNkBJPUxYm2FMJqknVegVrNwFgVXKy7iKT0WrRBdzxFksMlhJVyek8
+N/waP0dP7EYCkZuVkpEEecMCGq7vw1kiCw9riq42s1IOsS75J9ObTmv65fPp1rUF
+BVkxiR2JhZ3ElsSsEBvxIEImesmPVp5JttaSQubUZ/LYp/4UCEGbUwXCfbJ9xw5v
+UdlC0eGkzD8f4HG1Obfzn+0CAwEAAQ==
+-----END PUBLIC KEY-----
+EOD;
+
+
     /**
      * Chave pública de autorização - ambiente de testes
      */
     const AUTORIZACAO_PUB_KEY_TESTE = <<<EOD
 -----BEGIN PUBLIC KEY-----
-MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA0YFS941qmAr4XGnWoD2D
-GXwallAf60jfsQlNjVZE7QMr4wuG+rUAeSqo86/69Yji5iBwgd7oEsJLi/32ljkZ
-R4uxZbxZ/3vOBPQdSkvhhErblUMYb3TUckiprCFChtrEYcZbdTgSTQwxqPhFpn3j
-HVaM8S6G9WRvzzwPvbO4CBGG4MRXXX1ZbUG5wS7C3fk0PRvO4yvrfR9dqWYS14+G
-cIdzN/7n06IsVRrbMjMLgcOh25LkWTzhNnD8Th7G3hAKk5kXP8H2Y8GiUq9v9Qxs
-uYi8yznBvuvWzICyu2ajB/G8LOhLCnLF6OoXSHXDLGsF4YTzn1nyrFxjHh0ubwQt
-6qlMfUf0uczAibI7bPwhARfKzWLj+dVqw84H9P9bq+zeUPgDvUOULEw7v7i++yGj
-8ZHbRLh9jLgvDgXdUwtIewPHlrfQaotLMb2I62vvGokcYBpomjodcXoR4ve+6X8J
-WaprcEzFJDn9UqnNe4UuIHAm/TBYF+pHrCE3I5GWsF5+gfh0reXxe6GJawYfDyRn
-hdbI6Z8y2qKjSX3nGvfTWXLjbJgHoFfrX1RVQbPh+Drgf9bc4roNvoxtCFLrtkwf
-f+g6YHMVz+9IyVuCiK4+CVYHViOwRwb7UES/uWqmPliJ82UVgUNakqm3hKfvbVVt
-PGWZ/N5yqVOx44LEGy4PzlECAwEAAQ==
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA1qaaiiN46Hnpdoo5ORr2
+eryR9EZ7hA/GW4a5EIAcZHs8OK2lZgB8qsx+wFthNmF0jGCfrJCBL1sj1KFUUNVj
+ppXbT/XPw0Ywu8pBIWBEz2GLuta3OiC+5z4CVQEdjbRYiAFvtUyWoziA6R3LxSxc
+x2b0GkLZBfAlggXlyQE+LzANfYqggvyQzWMv0tptdCGNInORblwhF3WVf0WWilml
+0V//pU3KIMzlwR1Yq1r4lzwGnAkk6O8Ma0HDH1JqLwm2zz8C2sN8OaoqvJcEBErX
+my7OG9J4BvrHJJh81HyMff+5HMajpe56e7A4QyIVwcsC0kFrJ9LKJDmQDvZ/ywTY
+ISFWsOzszL27mu5YWPPA49TVT5TYpsjh6zWi/qNYfnguRfQmN6DI9cKOyhsxeE7v
+/xZjSlvCZW/iGD2PeaJvM7/qO3lKzPUd68asUXLAqmXtRTyMvY3cdXMtpfvhUcmX
+DG6OULCds8fSHYSZyUf5KFAyEH9gxlc+wmUV5Hbq8wBzBa7e/L1DBEukcElB3Dcz
+nNY6R7u/Yj3Aqc7kbbSahGbxMnyNuzysHO5lAak+Flb3ZCulL34fXPQfZzIKdpn/
+Wcu91s4GF+l46xDzLSoSiARCbRSECUowmrAzQR77igIewqRicCP3swDpcKDraspz
+d6j5zU+rjGXdsuYb0kSKg90CAwEAAQ==
 -----END PUBLIC KEY-----
 EOD;
 
@@ -86,6 +104,9 @@ EOD;
 
         $this->pubKeyArray['teste']['Application'] = self::AUTORIZACAO_PUB_KEY_TESTE;
         $this->pubKeyArray['teste']['Authorization'] = self::AUTENTICACAO_PUB_KEY_TESTE;
+
+        $this->pubKeyArray['local']['Application'] = self::AUTORIZACAO_PUB_KEY_LOCAL;
+        $this->pubKeyArray['local']['Authorization'] = self::AUTENTICACAO_PUB_KEY_TESTE;
 
         $this->env = $env;
         $this->type = $type;

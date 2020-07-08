@@ -1,3 +1,10 @@
+[![Pipeline](https://git.dds.ufvjm.edu.br/ufvjm/graphql-php-client/badges/test/pipeline.svg)](//git.dds.ufvjm.edu.br/ufvjm/graphql-php-client/pipelines)
+[![Coverage](https://git.dds.ufvjm.edu.br/ufvjm/graphql-php-client/badges/test/coverage.svg)](//git.dds.ufvjm.edu.br/ufvjm/graphql-php-client)
+[![Latest Stable Version](https://poser.pugx.org/ufvjm/graphql-client/v)](//packagist.org/packages/ufvjm/graphql-client)
+[![Total Downloads](https://poser.pugx.org/ufvjm/graphql-client/downloads)](//packagist.org/packages/ufvjm/graphql-client)
+[![Latest Unstable Version](https://poser.pugx.org/ufvjm/graphql-client/v/unstable)](//packagist.org/packages/ufvjm/graphql-client)
+[![License](https://poser.pugx.org/ufvjm/graphql-client/license)](//packagist.org/packages/ufvjm/graphql-client)
+
 # Client GraphQL - UFVJM
 
 Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
@@ -20,7 +27,8 @@ Uma biblioteca PHP para realizar requisições ao servidor GraphQL da UFVJM.
             * [Carregando relacionamentos](#carregando-relacionamentos)
       * [Contribuindo para a biblioteca](#contribuindo-para-a-biblioteca)
          * [Repositório](#repositório)
-         * [Ferramentas de lint](#ferramentas-de-lint)
+         * [Ferramentas](#ferramentas)
+            * [Testes](#testes)
       * [Documentação](#documentação)
       * [Equipe Responsável](#equipe-responsável)
       * [Parceiros](#parceiros)
@@ -214,34 +222,56 @@ $disciplina =
 
 O desenvolvimento é realizado na branch `dev`. Os mantenedores do respoitório levam as alterações aprovadas para a branch `master`.
 
-### Ferramentas de lint
+### Ferramentas
 
-Construindo a imagem
-
-```bash
-./build.sh
-```
-
-Iniciando o container
+Construindo a imagem, atualizando as bibliotecas e iniciando o container:
 
 ```bash
-./run.sh
+make
 ```
 
 Executando as validações
 
 ```bash
-# Entrando no container
-docker exec -it graphql-client bash
+make tests
+```
 
-# Testando padronizacao
-./phpcs.sh
+Parando o container:
 
-# Tentar corrigir automaticamente
-./phpcbf.sh
+```bash
+make clean
+```
 
-# Procurando sujeira de código
-./phpmd.sh
+#### Testes
+
+PHP Unit:
+
+```bash
+make test
+```
+
+PHP Code Sniffer:
+
+```bash
+make lint-check
+```
+
+PHP Code Beauty Fixer:
+
+```bash
+make lint-fix
+```
+
+PHP Mess Detector:
+
+```bash
+make lint-md
+```
+
+PHP Security Checker:
+
+```bash
+make security-check
 ```
 
 ## Documentação

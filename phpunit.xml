@@ -13,8 +13,9 @@
             <file>tests/AuthGraphqlRequestTest.php</file>
         </testsuite>
         <testsuite name="Feature">
-            <directory suffix='.php'>tests/Ensino</directory>
+            <directory suffix='.php'>tests/Administracao</directory>
             <directory suffix='.php'>tests/Common</directory>
+            <directory suffix='.php'>tests/Ensino</directory>
         </testsuite>
     </testsuites>
     <filter>
