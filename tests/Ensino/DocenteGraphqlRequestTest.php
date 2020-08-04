@@ -28,7 +28,7 @@ class DocenteGraphqlRequestTest extends GraphqlRequestTest
 
     public function testDocenteQueryList()
     {
-        // Carrega a classe de disciplina
+        // Carrega a classe de docente
         $docenteGraphqlRequest = new DocenteGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3);
