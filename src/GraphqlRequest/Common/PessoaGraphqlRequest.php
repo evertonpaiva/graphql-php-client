@@ -7,6 +7,7 @@ use GraphqlClient\GraphqlQuery\RelationQuery;
 use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\Ensino\DocenteGraphqlRequest;
+use GraphqlClient\GraphqlRequest\Ensino\AlunoGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
@@ -77,6 +78,22 @@ class PessoaGraphqlRequest extends GraphqlRequest
                 'docentes',
                 DocenteGraphqlRequest::class,
                 $docente,
+                $pagination,
+                $filters
+            )
+        );
+
+        return $this;
+    }
+
+    public function addRelationAlunos($aluno = null, $pagination = null, $filters = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'alunos',
+                AlunoGraphqlRequest::class,
+                $aluno,
                 $pagination,
                 $filters
             )
