@@ -75,6 +75,46 @@ IPCWGv47FhV9HEl3Cn1df50NTvLuIJ3JF/x1KSksCoJKWputqfkzrKyWjg9xyj4w
 EOD;
 
     /**
+     * Chave pública de autorização - ambiente de produção
+     */
+    const AUTORIZACAO_PUB_KEY_PROD = <<<EOD
+-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAyKsmmRB4h75Rh8+wUYVn
+vCfcUZCJUU9t11KHwsHr3YF3tRpnztU4JrrGTDurCB9m7y17q9MVlaT4/uGBT9+i
+L1aRuKcMO3U8BxuWx7oISij1eJ2h5CaA4KWKA0QfaFvyie6WeoR+aZR1q+DLtTPY
+kxu4JmnVSxRaIePTILGJtInUz5nmuGKEtmyYYf3qNDluhaa35/g84LOuNjKc8PHb
+Hd+V/8WCTjt5Ig2HoJ3uvCmQYXuwRjdYpeHJTDe1qdPMFFXPIrGKmj1dTt57gshx
+us61kkaGa0nVVcnG/sxa7IK5N1BjOGN1g+dkc+BSPhxHQGrDVE1Qn+N4ZxycwmNu
+N2W10YzUSyE/+/nOoJGeJmY7MH4GBrXT4cIlJxZk/1KMunT/YXmjDAYjVDWKalou
+xXxJecC+w3tgLl50SnbTbKckSlrjWPW4GkAwI79d2+MJKgQK8Ysv96Vs6w18/76w
+PSlySQbhhOM9YaRMJ2B6xMmIRLeZBAvxRJLnKXP5mGsZMQ5GkmbuaLm+b/R3n2+b
+f3sVNf72iSnJRDQ3O8uAAWNiUrjKjIdevHtKXHmCrwgZ2TVma9Q9v5vH1dcF1+4S
+0ZO+rsRkxihl6dR3Q0rRz1vk6CoOOoI4UwJ7OAVKf68GtivYDO7EYYxxXlPJla8h
+uUjZvlPgZWQD5bMWdzr59Y0CAwEAAQ==
+-----END PUBLIC KEY-----
+EOD;
+
+    /**
+     * Chave pública de autenticação - ambiente de produção
+     */
+    const AUTENTICACAO_PUB_KEY_PROD = <<<EOD
+-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzvU4FjaC+pceT06UlGge
+qePppfCNceYRrQ82700UsVsFuFSIdvCsw+GKuT28/w5SdNHzjQoV847DfXjC8x6j
+UWXvctU/m7AjIl9+0AavZ6/vG/yDLiqGCjob26j5kEi8kaX44LSfUfzLU/L4Lzlc
+qpxufZV1FEl2+Qm350SNIx9w8pCqXeQazACktzqyWS3b6CHRcIOCjKZxrhiM2iFi
+7dGElojwVDinoz95WqFn48bCtKSHPAId/y0hswBfD+8t3mc077ge1NmgDPemP2qu
+3gljjoLiaX6dtd74LRUf0qHQxXW2xESxEvvRsqJ7HKf1POy8nLPt3g2cZ4AnBG6e
+j2XgEas72GgmNdGIRPey0e/mDzJTkudr37mz+8kZMEIZq3bwAIkg36wolPgOMV60
+KNxRQUKZdlY7kJmE+68QTkCA46jjESxgSoWT8T1O/Xv81ZDTAszmkZAVyPOwrs6C
+k1XdVMcMe/J88kSGzP/BsOXFXnu31jwc6MC9UzJXyqi8vBs8orSbQ0JFVhFGeWdo
+LcVS2vs1uztXITCjc+//udziA55YpOsVvvfOnxKsHN6sFWKA4Q1VHL6/bL0LIjHd
+yPMGflZVwlvjxkiU28AinmsCeQzlUEtIgpKFdjwr9ivqCxSOexMq86pdnFZlUyHj
+jr0hus33apMEoYZv38voQoMCAwEAAQ==
+-----END PUBLIC KEY-----
+EOD;
+
+    /**
      * Vetor de chaves públicas de autorização e autenticação por ambiente
      * @var array
      */
@@ -104,6 +144,9 @@ EOD;
 
         $this->pubKeyArray['teste']['Application'] = self::AUTORIZACAO_PUB_KEY_TESTE;
         $this->pubKeyArray['teste']['Authorization'] = self::AUTENTICACAO_PUB_KEY_TESTE;
+
+        $this->pubKeyArray['prod']['Application'] = self::AUTORIZACAO_PUB_KEY_PROD;
+        $this->pubKeyArray['prod']['Authorization'] = self::AUTENTICACAO_PUB_KEY_PROD;
 
         $this->pubKeyArray['local']['Application'] = self::AUTORIZACAO_PUB_KEY_LOCAL;
         $this->pubKeyArray['local']['Authorization'] = self::AUTENTICACAO_PUB_KEY_TESTE;
