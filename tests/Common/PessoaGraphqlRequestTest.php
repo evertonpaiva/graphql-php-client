@@ -100,6 +100,7 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
             $pessoaGraphqlRequest
                 ->addRelationRaca()
                 ->addRelationDocentes()
+                ->addRelationAlunos()
                 ->queryList($pagination)
                 ->getResults();
 
@@ -107,5 +108,6 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($pessoas->pageInfo);
         $this->assertIsObject($pessoas->edges[0]->node->objRaca);
         $this->assertIsArray($pessoas->edges[0]->node->docentes->edges);
+        $this->assertIsArray($pessoas->edges[0]->node->alunos->edges);
     }
 }
