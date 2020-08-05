@@ -7,6 +7,7 @@ use GraphqlClient\GraphqlQuery\RelationQuery;
 use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\Common\PessoaGraphqlRequest;
+use GraphqlClient\GraphqlRequest\Ensino\ProgramaGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
@@ -68,6 +69,13 @@ class AlunoGraphqlRequest extends GraphqlRequest
         return $this->generatePaginatedQuery();
     }
 
+    /**
+     * @param null $pessoa
+     * @param null $pagination paginação
+     * @return $this
+     * @throws \GraphqlClient\Exception\WrongInstancePaginationException
+     * @throws \GraphqlClient\Exception\WrongInstanceRelationException
+     */
     public function addRelationPessoa($pessoa = null, $pagination = null)
     {
         $this->addRelation(
@@ -76,6 +84,28 @@ class AlunoGraphqlRequest extends GraphqlRequest
                 'objPessoa',
                 PessoaGraphqlRequest::class,
                 $pessoa,
+                $pagination
+            )
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param null $programa
+     * @param null $pagination paginação
+     * @return $this
+     * @throws \GraphqlClient\Exception\WrongInstancePaginationException
+     * @throws \GraphqlClient\Exception\WrongInstanceRelationException
+     */
+    public function addRelationPrograma($programa = null, $pagination = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::SINGLE,
+                'objPrograma',
+                ProgramaGraphqlRequest::class,
+                $programa,
                 $pagination
             )
         );
