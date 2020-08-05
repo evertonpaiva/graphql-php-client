@@ -92,22 +92,36 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
 
     public function testPessoaQueryListAddRelations()
     {
+        // Dividindo os testes em 2 requisições para evitar ultrapassar
+        // limite de complexidade de consulta
+
         // Carrega a classe de pessoa
-        $pessoaGraphqlRequest = new PessoaGraphqlRequest();
+        $pessoaGraphqlRequest1 = new PessoaGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3);
-        $pessoas =
-            $pessoaGraphqlRequest
+        $pessoas1 =
+            $pessoaGraphqlRequest1
                 ->addRelationRaca()
                 ->addRelationDocentes()
                 ->addRelationAlunos()
                 ->queryList($pagination)
                 ->getResults();
 
-        $this->assertIsArray($pessoas->edges);
-        $this->assertIsObject($pessoas->pageInfo);
-        $this->assertIsObject($pessoas->edges[0]->node->objRaca);
-        $this->assertIsArray($pessoas->edges[0]->node->docentes->edges);
-        $this->assertIsArray($pessoas->edges[0]->node->alunos->edges);
+        $this->assertIsArray($pessoas1->edges);
+        $this->assertIsObject($pessoas1->pageInfo);
+        $this->assertIsObject($pessoas1->edges[0]->node->objRaca);
+        $this->assertIsArray($pessoas1->edges[0]->node->docentes->edges);
+        $this->assertIsArray($pessoas1->edges[0]->node->alunos->edges);
+
+        // Carrega a classe de pessoa
+        $pessoaGraphqlRequest2 = new PessoaGraphqlRequest();
+        $pessoas2 =
+            $pessoaGraphqlRequest2
+                ->addRelationServidores()
+                ->queryList($pagination)
+                ->getResults();
+        $this->assertIsArray($pessoas2->edges);
+        $this->assertIsObject($pessoas2->pageInfo);
+        $this->assertIsArray($pessoas2->edges[0]->node->servidores->edges);
     }
 }
