@@ -1,3 +1,10 @@
+## [0.0.5] - 2020-08-06
+
+### Adicionado
+- Adicionando entidade EnsinoPrograma
+- Adicionando entidade RhServidor
+- Adicionando entidade AdministracaoSetor
+
 ## [0.0.4] - 2020-08-03
 
 ### Adicionado

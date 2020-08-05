@@ -13,7 +13,7 @@ class AlunoGraphqlRequestTest extends GraphqlRequestTest
         // Carrega a classe de aluno
         $alunoGraphqlRequest = new AlunoGraphqlRequest();
 
-        // Recupera informações de docente por código
+        // Recupera informações de aluno por código
         $aluno = $alunoGraphqlRequest->queryGetById('1201219602')->getResults();
 
         $expected = new stdClass;
@@ -39,7 +39,7 @@ class AlunoGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($alunos->pageInfo);
     }
 
-    public function testDocenteQueryListAddRelations()
+    public function testAlunoQueryListAddRelations()
     {
         // Carrega a classe de aluno
         $alunoGraphqlRequest = new AlunoGraphqlRequest();
@@ -48,11 +48,13 @@ class AlunoGraphqlRequestTest extends GraphqlRequestTest
         $alunos =
             $alunoGraphqlRequest
                 ->addRelationPessoa()
+                ->addRelationPrograma()
                 ->queryList($pagination)
                 ->getResults();
 
         $this->assertIsArray($alunos->edges);
         $this->assertIsObject($alunos->pageInfo);
         $this->assertIsObject($alunos->edges[0]->node->objPessoa);
+        $this->assertIsObject($alunos->edges[0]->node->objPrograma);
     }
 }

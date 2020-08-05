@@ -3,9 +3,7 @@
 namespace GraphqlClient\GraphqlRequest\Administracao;
 
 use GraphQL\Variable;
-use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
 use GraphqlClient\GraphqlRequest\AuthType;
-use GraphqlClient\GraphqlRequest\Common\PessoaGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 

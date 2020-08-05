@@ -1,34 +1,33 @@
 <?php
 
-namespace GraphqlClient\GraphqlRequest\Ensino;
+namespace GraphqlClient\GraphqlRequest\Rh;
 
 use GraphQL\Variable;
 use GraphqlClient\GraphqlQuery\RelationQuery;
 use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\Common\PessoaGraphqlRequest;
-use GraphqlClient\GraphqlRequest\Ensino\ProgramaGraphqlRequest;
+use GraphqlClient\GraphqlRequest\Administracao\SetorGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
 /**
  * Class AuthGraphqlRequest
- * Informações de aluno
+ * Informações de servidor
  *
  * @package GraphqlClient\GraphqlRequest
  */
-class AlunoGraphqlRequest extends GraphqlRequest
+class ServidorGraphqlRequest extends GraphqlRequest
 {
 
     public function __construct()
     {
         $fields = [
-            'matricula',
-            'anoingresso',
-            'semingresso',
+            'idfuncionario',
+            'idvinculo',
             'idpessoa',
-            'cra',
-            'percentualconclusao'
+            'idsetor',
+            'cargo'
         ];
 
         $authType = AuthType::APP_USER_AUTH;
@@ -37,18 +36,18 @@ class AlunoGraphqlRequest extends GraphqlRequest
     }
 
     /**
-     * Realiza busca por matrícula de aluno
-     * @param $matricula matrícula do aluno
-     * @return AlunoGraphqlRequest
+     * Realiza busca por código de funcionário de servidor
+     * @param $idfuncionario código de funcionário do servidor
+     * @return ServidorGraphqlRequest
      */
-    public function queryGetById($matricula)
+    public function queryGetById($idfuncionario)
     {
         $this->clearQueryObjects();
-        $this->queryName = 'ensinoAluno';
+        $this->queryName = 'rhServidor';
 
-        $this->variablesNames[] = new Variable('matricula', 'String', true);
-        $this->variablesValues['matricula'] = $matricula;
-        $this->arguments = ['matricula' => '$matricula'];
+        $this->variablesNames[] = new Variable('idfuncionario', 'String', true);
+        $this->variablesValues['idfuncionario'] = $idfuncionario;
+        $this->arguments = ['idfuncionario' => '$idfuncionario'];
 
         $this->generateSingleQuery();
 
@@ -56,14 +55,14 @@ class AlunoGraphqlRequest extends GraphqlRequest
     }
 
     /**
-     * Lista de alunos
+     * Lista de funcionarios
      * @param PaginationQuery $pagination informações de paginação
-     * @return AlunoGraphqlRequest
+     * @return ServidorGraphqlRequest
      */
     public function queryList(PaginationQuery $pagination)
     {
         $this->clearQueryObjects();
-        $this->queryName = 'ensinoAlunos';
+        $this->queryName = 'rhServidores';
         $this->pagination = $pagination;
 
         return $this->generatePaginatedQuery();
@@ -92,20 +91,20 @@ class AlunoGraphqlRequest extends GraphqlRequest
     }
 
     /**
-     * @param null $programa
+     * @param null $setor
      * @param null $pagination paginação
      * @return $this
      * @throws \GraphqlClient\Exception\WrongInstancePaginationException
      * @throws \GraphqlClient\Exception\WrongInstanceRelationException
      */
-    public function addRelationPrograma($programa = null, $pagination = null)
+    public function addRelationSetor($setor = null, $pagination = null)
     {
         $this->addRelation(
             new RelationQuery(
                 RelationType::SINGLE,
-                'objPrograma',
-                ProgramaGraphqlRequest::class,
-                $programa,
+                'objSetor',
+                SetorGraphqlRequest::class,
+                $setor,
                 $pagination
             )
         );
