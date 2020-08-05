@@ -1,4 +1,9 @@
-## [0.0.5] - 2020-08-06
+## [0.0.6] - 2020-08-05
+
+### Adicionado
+- Adicionando relacionamento EnsinoPessoa com RhServidor
+
+## [0.0.5] - 2020-08-05
 
 ### Adicionado
 - Adicionando entidade EnsinoPrograma
