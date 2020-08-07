@@ -27,7 +27,8 @@ class ServidorGraphqlRequest extends GraphqlRequest
             'idvinculo',
             'idpessoa',
             'idsetor',
-            'cargo'
+            'cargo',
+            'situacao'
         ];
 
         $authType = AuthType::APP_USER_AUTH;
