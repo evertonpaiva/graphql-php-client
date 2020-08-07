@@ -1,3 +1,8 @@
+## [0.0.8] - 2020-08-07
+
+### Adicionado
+- Adicionando telefone e celular na entidade CommonPessoa
+
 ## [0.0.7] - 2020-08-07
 
 ### Adicionado

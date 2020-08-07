@@ -28,6 +28,8 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
         $expected->sexo = 'M';
         $expected->nomepai = 'ADMIN';
         $expected->containstitucional = 'docker-builder';
+        $expected->telefone = '32175486';
+        $expected->celular = '99058333';
 
         $this->assertEquals($expected, $pessoa);
     }
