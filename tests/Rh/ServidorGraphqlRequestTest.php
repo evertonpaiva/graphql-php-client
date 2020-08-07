@@ -22,6 +22,7 @@ class ServidorGraphqlRequestTest extends GraphqlRequestTest
         $expected->idpessoa = 656582;
         $expected->idsetor = 1430;
         $expected->cargo = 'ANALISTA DE TEC DA INFORMAÇÃO ';
+        $expected->situacao = 'ATIVO PERMANENTE';
 
         $this->assertEquals($expected, $aluno);
     }
