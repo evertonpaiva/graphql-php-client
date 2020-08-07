@@ -1,3 +1,10 @@
+## [0.0.7] - 2020-08-07
+
+### Adicionado
+- Adicionando entidade EnsinoSituacao
+- Adicionando relacionamento EnsinoAluno com EnsinoSituacao
+- Adicionando situacao de RhServidor
+
 ## [0.0.6] - 2020-08-05
 
 ### Adicionado
