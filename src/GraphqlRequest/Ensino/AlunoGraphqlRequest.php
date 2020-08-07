@@ -7,7 +7,6 @@ use GraphqlClient\GraphqlQuery\RelationQuery;
 use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\Common\PessoaGraphqlRequest;
-use GraphqlClient\GraphqlRequest\Ensino\ProgramaGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
@@ -106,6 +105,28 @@ class AlunoGraphqlRequest extends GraphqlRequest
                 'objPrograma',
                 ProgramaGraphqlRequest::class,
                 $programa,
+                $pagination
+            )
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param null $situacao
+     * @param null $pagination paginação
+     * @return $this
+     * @throws \GraphqlClient\Exception\WrongInstancePaginationException
+     * @throws \GraphqlClient\Exception\WrongInstanceRelationException
+     */
+    public function addRelationSituacao($situacao = null, $pagination = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::SINGLE,
+                'objSituacao',
+                SituacaoGraphqlRequest::class,
+                $situacao,
                 $pagination
             )
         );
