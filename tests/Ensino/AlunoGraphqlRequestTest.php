@@ -49,6 +49,7 @@ class AlunoGraphqlRequestTest extends GraphqlRequestTest
             $alunoGraphqlRequest
                 ->addRelationPessoa()
                 ->addRelationPrograma()
+                ->addRelationSituacao()
                 ->queryList($pagination)
                 ->getResults();
 
@@ -56,5 +57,6 @@ class AlunoGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($alunos->pageInfo);
         $this->assertIsObject($alunos->edges[0]->node->objPessoa);
         $this->assertIsObject($alunos->edges[0]->node->objPrograma);
+        $this->assertIsObject($alunos->edges[0]->node->objSituacao);
     }
 }
