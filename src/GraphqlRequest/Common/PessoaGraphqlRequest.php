@@ -30,6 +30,8 @@ class PessoaGraphqlRequest extends GraphqlRequest
             'sexo',
             'nomepai',
             'containstitucional',
+            'telefone',
+            'celular'
         ];
 
         $authType = AuthType::APP_USER_AUTH;
