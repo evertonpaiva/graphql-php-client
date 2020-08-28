@@ -58,13 +58,20 @@ class ServidorGraphqlRequest extends GraphqlRequest
     /**
      * Lista de funcionarios
      * @param PaginationQuery $pagination informações de paginação
+     * @param null $idvinculo SIAPE do servidor
      * @return ServidorGraphqlRequest
      */
-    public function queryList(PaginationQuery $pagination)
+    public function queryList(PaginationQuery $pagination, $idvinculo = null)
     {
         $this->clearQueryObjects();
         $this->queryName = 'rhServidores';
         $this->pagination = $pagination;
+
+        if (!is_null($idvinculo)) {
+            $this->variablesNames[] = new Variable('idvinculo', 'String', true);
+            $this->variablesValues['idvinculo'] = $idvinculo;
+            $this->arguments = ['idvinculo' => '$idvinculo'];
+        }
 
         return $this->generatePaginatedQuery();
     }

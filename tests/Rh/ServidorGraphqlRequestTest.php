@@ -57,4 +57,16 @@ class ServidorGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsObject($servidores->edges[0]->node->objPessoa);
         $this->assertIsObject($servidores->edges[0]->node->objSetor);
     }
+
+    public function testServidorQueryListFilterSiape()
+    {
+        // Carrega a classe de servidor
+        $servidorGraphqlRequest = new ServidorGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(3);
+        $pessoas = $servidorGraphqlRequest->queryList($pagination, '1670274')->getResults();
+
+        $this->assertIsArray($pessoas->edges);
+        $this->assertIsObject($pessoas->pageInfo);
+    }
 }
