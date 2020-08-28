@@ -1,7 +1,7 @@
 .prepara_variaveis: &prepara_variaveis
   - export DOCKER_TAG=`echo ${CI_BUILD_REF_NAME} | sed s/dev/latest/`
   - export SHORT_SHA=`echo ${CI_COMMIT_SHA} | cut -c1-8`
-  - export IMG_NAME=`echo ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:${DOCKER_TAG}`
+  - export IMG_NAME=`echo ${CI_REGISTRY}/micro/graphql-client:${DOCKER_TAG}`
 
 image: docker:dind
 
