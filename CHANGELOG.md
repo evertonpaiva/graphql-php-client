@@ -1,3 +1,8 @@
+## [0.0.9] - 2020-08-28
+
+### Adicionado
+- Adicionando filtro de busca de servidor por SIAPE na entidade RhServidor
+
 ## [0.0.8] - 2020-08-07
 
 ### Adicionado
