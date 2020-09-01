@@ -64,9 +64,9 @@ class ServidorGraphqlRequestTest extends GraphqlRequestTest
         $servidorGraphqlRequest = new ServidorGraphqlRequest();
 
         $pagination = new ForwardPaginationQuery(3);
-        $pessoas = $servidorGraphqlRequest->queryList($pagination, '1670274')->getResults();
+        $servidores = $servidorGraphqlRequest->queryList($pagination, '1670274')->getResults();
 
-        $this->assertIsArray($pessoas->edges);
-        $this->assertIsObject($pessoas->pageInfo);
+        $this->assertIsArray($servidores->edges);
+        $this->assertIsObject($servidores->pageInfo);
     }
 }

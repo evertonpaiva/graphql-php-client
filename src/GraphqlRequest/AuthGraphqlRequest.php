@@ -72,7 +72,14 @@ class AuthGraphqlRequest extends GraphqlRequest
                             ]
                         ),
                     'nome',
-                    'cpf'
+                    'cpf',
+                    'email',
+                    'containstitucional',
+                    'idpessoa',
+                    'endereco',
+                    'bairro',
+                    'municipio',
+                    'cep'
                 ]
             );
 
