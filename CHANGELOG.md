@@ -1,3 +1,8 @@
+## [0.0.10] - 2020-09-01
+
+### Adicionado
+- Adicionando informações pessoais na função usuarioLogadoInfo
+
 ## [0.0.9] - 2020-08-28
 
 ### Adicionado
