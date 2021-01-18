@@ -27,6 +27,7 @@ class PessoaGraphqlRequest extends GraphqlRequest
             'idpessoa',
             'nome',
             'cpf',
+            'cpf_limpo',
             'sexo',
             'nomepai',
             'containstitucional',
