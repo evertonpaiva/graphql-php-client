@@ -1,3 +1,13 @@
+## [0.0.11] - 2021-01-18
+
+### Adicionado
+- Adicionando campo cpf_limpo na entidade CommonPessoa
+
+## [0.0.10] - 2020-09-01
+
+### Adicionado
+- Adicionando informações pessoais na função usuarioLogadoInfo
+
 ## [0.0.9] - 2020-08-28
 
 ### Adicionado
