@@ -19,10 +19,11 @@ build-test:
   script:
     - >
       if [ "$BUILD_TEST_IMG" == "S" ]; then
+        echo "Logando no hub"
+        echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
         echo "Criando imagem"
         docker build --no-cache -t ${CI_PROJECT_NAME}:${DOCKER_TAG} -f Dockerfile .
         docker tag ${CI_PROJECT_NAME}:${DOCKER_TAG} ${IMG_NAME}
-        echo ${CI_REGISTRY_PASSWORD} | docker login -u ${CI_REGISTRY_USER} --password-stdin ${CI_REGISTRY}
         echo "Enviando para o hub"
         docker push ${IMG_NAME}
         docker logout ${CI_REGISTRY}
@@ -63,8 +64,6 @@ tests-other:
     - echo "Executando testes"
     # Padrao de codificacao
     - ./phpcs.sh
-    # Vulnerabilidades de seguranca nas bibliotecas
-    - ./security-check.sh
     # Verificador de erros/sujeira PHP Mess Detector
     - ./phpmd.sh
   when: on_success

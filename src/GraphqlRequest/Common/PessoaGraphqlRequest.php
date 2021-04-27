@@ -125,6 +125,7 @@ class PessoaGraphqlRequest extends GraphqlRequest
     /**
      * Lista de pessoas
      * @param PaginationQuery $pagination informações de paginação
+     * @param string $nome nome ou parte do nome da pessoa
      * @return PessoaGraphqlRequest
      */
     public function queryList($pagination = null, $nome = null)
