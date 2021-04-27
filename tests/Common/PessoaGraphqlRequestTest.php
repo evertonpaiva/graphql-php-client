@@ -24,8 +24,8 @@ class PessoaGraphqlRequestTest extends GraphqlRequestTest
         $expected = new stdClass;
         $expected->idpessoa = 1;
         $expected->nome = 'ADMINISTRADOR DO SISTEMA';
-        $expected->cpf = '';
-        $expected->cpf_limpo = null;
+        $expected->cpf = '777.777.777-77';
+        $expected->cpf_limpo = '77777777777';
         $expected->sexo = 'M';
         $expected->nomepai = 'ADMIN';
         $expected->containstitucional = 'docker-builder';

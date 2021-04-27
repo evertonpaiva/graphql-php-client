@@ -1,3 +1,14 @@
+## [0.0.12] - 2021-04-27
+
+### Adicionado
+- Adicionando entidade EnsinoTipoCurso
+- Adicionando entidade EnsinoModalidade
+- Adicionando relacionamento EnsinoCurso com EnsinoTipoCurso e EnsinoModalidade
+- Adicionando filtro por nome na consulta de listagem por cursos
+
+### Corrigido
+- Testes de CommonPessoa
+
 ## [0.0.11] - 2021-01-18
 
 ### Adicionado
