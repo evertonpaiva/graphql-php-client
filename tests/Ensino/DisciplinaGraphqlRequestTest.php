@@ -110,7 +110,7 @@ class DisciplinaGraphqlRequestTest extends GraphqlRequestTest
         // Carrega a classe de disciplina
         $disciplinaGraphqlRequest = new DisciplinaGraphqlRequest();
 
-        $pagination = new BackwardPaginationQuery(1);
+        $pagination = new BackwardPaginationQuery(1, 'WyIxMzY4MyAgICAgICAgICAgICAgICJd');
         $disciplinas = $disciplinaGraphqlRequest->queryList($pagination)->getResults();
 
         $this->assertIsArray($disciplinas->edges);
