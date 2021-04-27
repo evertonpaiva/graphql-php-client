@@ -42,4 +42,39 @@ class CursoGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsArray($cursos->edges);
         $this->assertIsObject($cursos->pageInfo);
     }
+
+    /**
+     * Teste de lista de cursos filtrando por nome
+     * @throws WrongInstancePaginationException
+     */
+    public function testCursoQueryListFilterNome()
+    {
+        // Carrega a classe de curso
+        $cursoGraphqlRequest = new CursoGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(3);
+        $cursos = $cursoGraphqlRequest->queryList($pagination, 'SISTEMAS')->getResults();
+
+        $this->assertIsArray($cursos->edges);
+        $this->assertIsObject($cursos->pageInfo);
+    }
+
+    public function testCursoQueryListAddRelations()
+    {
+        // Carrega a classe de curso
+        $cursoGraphqlRequest = new CursoGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(3);
+        $cursos =
+            $cursoGraphqlRequest
+                ->addRelationModalidade()
+                ->addRelationTipoCurso()
+                ->queryList($pagination)
+                ->getResults();
+
+        $this->assertIsArray($cursos->edges);
+        $this->assertIsObject($cursos->pageInfo);
+        $this->assertIsObject($cursos->edges[0]->node->objModalidade);
+        $this->assertIsObject($cursos->edges[0]->node->objTipoCurso);
+    }
 }
