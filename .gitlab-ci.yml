@@ -64,8 +64,6 @@ tests-other:
     - echo "Executando testes"
     # Padrao de codificacao
     - ./phpcs.sh
-    # Vulnerabilidades de seguranca nas bibliotecas
-    - ./security-check.sh
     # Verificador de erros/sujeira PHP Mess Detector
     - ./phpmd.sh
   when: on_success
