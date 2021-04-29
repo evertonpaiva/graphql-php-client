@@ -15,6 +15,9 @@ use GraphqlClient\GraphqlQuery\PaginationQuery;
  */
 class ModalidadeGraphqlRequest extends GraphqlRequest
 {
+    const PRESENCIAL = 'PRESENCIAL';
+    const EAD = 'EAD';
+    const LEC = 'LEC';
 
     public function __construct()
     {
