@@ -53,11 +53,13 @@ class CursoGraphqlRequest extends GraphqlRequest
     /**
      * Lista de cursos
      * @param PaginationQuery $pagination informações de paginação
-     * @param string $nome nome ou parte do nome da pessoa
+     * @param $nome nome ou parte do nome da pessoa
+     * @param $tipoCurso tipo de curso
+     * @param $modalidade modalidade de curso
      * @return CursoGraphqlRequest
      * @throws WrongInstancePaginationException
      */
-    public function queryList(PaginationQuery $pagination, $nome = null)
+    public function queryList(PaginationQuery $pagination, $nome = null, $tipoCurso = null, $modalidade = null)
     {
         $this->clearQueryObjects();
         $this->queryName = 'ensinoCursos';
@@ -66,7 +68,19 @@ class CursoGraphqlRequest extends GraphqlRequest
         if (!is_null($nome)) {
             $this->variablesNames[] = new Variable('nome', 'String', false);
             $this->variablesValues['nome'] = $nome;
-            $this->arguments = ['nome' => '$nome'];
+            $this->arguments['nome'] = '$nome';
+        }
+
+        if (!is_null($tipoCurso)) {
+            $this->variablesNames[] = new Variable('tipoCurso', 'TIPO_CURSO', false);
+            $this->variablesValues['tipoCurso'] = $tipoCurso;
+            $this->arguments['tipoCurso'] = '$tipoCurso';
+        }
+
+        if (!is_null($modalidade)) {
+            $this->variablesNames[] = new Variable('modalidade', 'MODALIDADE_CURSO', false);
+            $this->variablesValues['modalidade'] = $modalidade;
+            $this->arguments['modalidade'] = '$modalidade';
         }
 
         return $this->generatePaginatedQuery();

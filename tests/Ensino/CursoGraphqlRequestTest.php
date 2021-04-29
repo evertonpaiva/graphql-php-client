@@ -4,6 +4,8 @@ namespace GraphqlClient\Tests\Ensino;
 use GraphqlClient\Exception\WrongInstancePaginationException;
 use GraphqlClient\GraphqlRequest\Ensino\CursoGraphqlRequest;
 use GraphqlClient\GraphqlQuery\ForwardPaginationQuery;
+use GraphqlClient\GraphqlRequest\Ensino\ModalidadeGraphqlRequest;
+use GraphqlClient\GraphqlRequest\Ensino\TipoCursoGraphqlRequest;
 use GraphqlClient\Tests\GraphqlRequestTest;
 use stdClass;
 
@@ -55,6 +57,32 @@ class CursoGraphqlRequestTest extends GraphqlRequestTest
         $pagination = new ForwardPaginationQuery(3);
         $cursos = $cursoGraphqlRequest->queryList($pagination, 'SISTEMAS')->getResults();
 
+        $this->assertIsArray($cursos->edges);
+        $this->assertIsObject($cursos->pageInfo);
+    }
+
+    /**
+     * Teste de lista de cursos filtrando por nome, tipo e modalidade
+     * @throws WrongInstancePaginationException
+     */
+    public function testCursoQueryListFilterNomeTipoModalidade()
+    {
+        // Carrega a classe de curso
+        $cursoGraphqlRequest = new CursoGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(10);
+        $cursos = $cursoGraphqlRequest
+            ->addRelationModalidade()
+            ->addRelationTipoCurso()
+            ->queryList(
+                $pagination,
+                'ADMINISTRAÇÃO',
+                TipoCursoGraphqlRequest::GRADUACAO,
+                ModalidadeGraphqlRequest::EAD
+            )->getResults();
+
+        $this->assertEquals('ENSINO A DISTÂNCIA', $cursos->edges[0]->node->objModalidade->modalidade);
+        $this->assertEquals('GRADUAÇÃO', $cursos->edges[0]->node->objTipoCurso->tipocurso);
         $this->assertIsArray($cursos->edges);
         $this->assertIsObject($cursos->pageInfo);
     }
