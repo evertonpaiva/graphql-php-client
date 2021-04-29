@@ -15,6 +15,12 @@ use GraphqlClient\GraphqlQuery\PaginationQuery;
  */
 class TipoCursoGraphqlRequest extends GraphqlRequest
 {
+    const DISCIPLINA_ISOLADA = 'DISCIPLINA_ISOLADA';
+    const DOUTORADO = 'DOUTORADO';
+    const ESPECIALIZACAO = 'ESPECIALIZACAO';
+    const GRADUACAO = 'GRADUACAO';
+    const MESTRADO = 'MESTRADO';
+    const POS_DOUTORADO = 'MESTRADO';
 
     public function __construct()
     {
