@@ -1,3 +1,10 @@
+## [0.0.13] - 2021-04-29
+
+### Adicionado
+- Adicionando filtro por Tipo de Curso e Modalidade de Curso na consulta de listagem por cursos
+- Criando constantes para enumeração dos valores de Tipo de Curso
+- Criando constantes para enumeração dos valores de Modalidade de Curso
+
 ## [0.0.12] - 2021-04-27
 
 ### Adicionado
