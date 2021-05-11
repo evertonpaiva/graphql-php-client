@@ -167,7 +167,7 @@ class GraphqlRequest
     private function getEnvValue($envName)
     {
         if (!getenv($envName)) {
-            throw new Error('Variável de ambiente '.$envName.' não definida');
+            throw new \Error('Variável de ambiente '.$envName.' não definida');
         }
         return getenv($envName);
     }
