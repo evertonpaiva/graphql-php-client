@@ -19,6 +19,7 @@ use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\Jwt\JwtDecoder;
 use GraphqlClient\Session\Session;
 use stdClass;
+use Exception;
 
 /**
  * Class GraphqlRequest
@@ -167,7 +168,7 @@ class GraphqlRequest
     private function getEnvValue($envName)
     {
         if (!getenv($envName)) {
-            throw new Error('Variável de ambiente '.$envName.' não definida');
+            throw new Exception('Variável de ambiente '.$envName.' não definida');
         }
         return getenv($envName);
     }
