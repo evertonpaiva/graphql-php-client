@@ -22,7 +22,7 @@ abstract class ConfigRequest
     /**
      * Variável de ambiente para a URL do servidor GraphQL do ambiente local
      */
-    const GRAPHQL_URL_LOCAL = 'http://192.168.1.106:30000/';
+    const GRAPHQL_URL_LOCAL = 'http://host.docker.internal:30000/';
 
     /**
      * Variável de ambiente para a URL do servidor GraphQL do ambiente de testes
