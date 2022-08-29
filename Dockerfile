@@ -1,7 +1,8 @@
 FROM hub.dds.ufvjm.edu.br/desenvolvimento/alpine-php7:latest
 
 # Habilitando xdebug
-RUN sed -i "s|;*zend_extension=xdebug.so|zend_extension=xdebug.so|i" /etc/php7/conf.d/xdebug.ini
+RUN sed -i "s|;*zend_extension=xdebug.so|zend_extension=xdebug.so|i" /etc/php7/conf.d/50_xdebug.ini
+RUN sed -i "s|;*xdebug.mode=off|xdebug.mode=coverage|i" /etc/php7/conf.d/50_xdebug.ini
 
 # copiando o código do repositório para o working_dir (/app) do container
 ADD . .
