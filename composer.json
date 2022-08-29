@@ -21,7 +21,7 @@
     "require": {
         "php": ">=7.1",
         "gmostafa/php-graphql-client": "^1.6",
-        "firebase/php-jwt": "5.*"
+        "firebase/php-jwt": "^5.0"
     },
     "require-dev": {
         "phpmd/phpmd" : "@stable",
@@ -38,5 +38,5 @@
             "GraphqlClient\\Tests\\": "tests/"
         }
     },
-    "version": "0.0.14"
+    "version": "0.0.15"
 }

@@ -15,6 +15,31 @@ class AuthGraphqlRequest extends GraphqlRequest
 {
 
     /**
+     * Retorna as informações do usuário logado
+     * @return array Vetor com informações do usuário logado
+     */
+    public function serverInfo()
+    {
+        // Limpando a sessão prévia, caso exista
+        $this->cleanHeaders();
+
+        $gql = (
+        new Query('server'))
+            ->setSelectionSet(
+                [
+                    'name',
+                    'message',
+                    'version',
+                    'description',
+                ]
+            );
+
+        $results = $this->getClient(AuthType::NO_AUTH)
+            ->runQuery($gql);
+        return $results->getResults()->data->server;
+    }
+
+    /**
      * Realiza o login da aplicação e do usuário
      *
      * @param object $request Requisição de autenticação

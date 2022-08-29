@@ -1,3 +1,11 @@
+## [0.0.15] - 2022-08-29
+
+### Adicionado
+- Adicionando query para testar informações do servidor GraphQL.
+
+### Atualizado
+- Atualizando versão dos pacotes do projeto.
+
 ## [0.0.13] - 2021-04-29
 
 ### Adicionado
