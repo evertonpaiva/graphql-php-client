@@ -1,3 +1,8 @@
+## [0.0.16] - 2022-08-30
+
+### Atualizado
+- Atualizando versão dos pacotes do projeto.
+
 ## [0.0.15] - 2022-08-29
 
 ### Adicionado
