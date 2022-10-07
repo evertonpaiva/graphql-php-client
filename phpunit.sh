@@ -21,7 +21,7 @@ echo -e "\nExecutando testes"
 RETORNO=$((PIPESTATUS[0]))
 
 # Extraindo do arquivo o % de cobertura de código
-COVERAGE=$(grep -E '^\s*Lines:\s*\d+.\d+\%' $PHPUNIT_LOG_FILE | grep -Eo '[0-9\.]+%' | tr -d '%')
+COVERAGE=$(grep -P '^\s*Lines:\s*\d+.\d+\%' $PHPUNIT_LOG_FILE | grep -Eo '[0-9\.]+%' | tr -d '%')
 
 end_time=$(date +%s)
 
