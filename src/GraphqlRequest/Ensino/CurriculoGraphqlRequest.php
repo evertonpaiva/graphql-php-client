@@ -5,25 +5,27 @@ namespace GraphqlClient\GraphqlRequest\Ensino;
 use GraphQL\Variable;
 use GraphqlClient\GraphqlQuery\RelationQuery;
 use GraphqlClient\GraphqlQuery\RelationType;
+use GraphqlClient\Exception\WrongInstancePaginationException;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
 /**
- * Class AuthGraphqlRequest
- * Informações de programa
+ * Class CurriculoGraphqlRequest
+ * Informações de curriculo
  *
  * @package GraphqlClient\GraphqlRequest
  */
-class ProgramaGraphqlRequest extends GraphqlRequest
+class CurriculoGraphqlRequest extends GraphqlRequest
 {
 
     public function __construct()
     {
         $fields = [
-            'matricula',
             'curso',
-            'curriculo'
+            'curriculo',
+            'anoini',
+            'semini',
         ];
 
         $authType = AuthType::APP_USER_AUTH;
@@ -32,18 +34,24 @@ class ProgramaGraphqlRequest extends GraphqlRequest
     }
 
     /**
-     * Realiza busca por matrícula de aluno
-     * @param $matricula matrícula do aluno
-     * @return ProgramdGraphqlRequest
+     * Realiza busca por curso/currículo
+     * @param $curso código do curso
+     * @param $curriculo currículo da grade
+     * @return CurriculoGraphqlRequest
      */
-    public function queryGetById($matricula)
+    public function queryGetById($curso, $curriculo)
     {
         $this->clearQueryObjects();
-        $this->queryName = 'ensinoPrograma';
+        $this->queryName = 'ensinoCurriculo';
 
-        $this->variablesNames[] = new Variable('matricula', 'String', true);
-        $this->variablesValues['matricula'] = $matricula;
-        $this->arguments = ['matricula' => '$matricula'];
+        $this->variablesNames[] = new Variable('curso', 'String', true);
+        $this->variablesNames[] = new Variable('curriculo', 'String', true);
+        $this->variablesValues['curso'] = $curso;
+        $this->variablesValues['curriculo'] = $curriculo;
+        $this->arguments = [
+            'curso' => '$curso',
+            'curriculo' => '$curriculo',
+        ];
 
         $this->generateSingleQuery();
 
@@ -51,14 +59,18 @@ class ProgramaGraphqlRequest extends GraphqlRequest
     }
 
     /**
-     * Lista de programas
+     * Lista de cursos
      * @param PaginationQuery $pagination informações de paginação
-     * @return ProgramaGraphqlRequest
+     * @param $nome nome ou parte do nome da pessoa
+     * @param $tipoCurriculo tipo de curso
+     * @param $modalidade modalidade de curso
+     * @return CurriculoGraphqlRequest
+     * @throws WrongInstancePaginationException
      */
     public function queryList(PaginationQuery $pagination)
     {
         $this->clearQueryObjects();
-        $this->queryName = 'ensinoProgramas';
+        $this->queryName = 'ensinoCurriculos';
         $this->pagination = $pagination;
 
         return $this->generatePaginatedQuery();
