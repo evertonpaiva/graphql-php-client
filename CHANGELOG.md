@@ -1,3 +1,13 @@
+## [0.0.17] - 2022-10-07
+
+### Adicionado
+- Adicionando entidade EnsinoGrade
+- Adicionando entidade EnsinoCurriculo
+
+### Atualizado
+- Atualizada imagem docker para PHP 7.3.33.
+- Atualizado PHP Unit para versão 9.5.
+
 ## [0.0.16] - 2022-08-30
 
 ### Atualizado
