@@ -1,6 +1,7 @@
 ## [0.0.18] - 2022-10-11
 
 ### Adicionado
+- Adicionando entidade EnsinoTurma
 - Adicionando propriedades período e tipo na entidade EnsinoGrade
 - Relacionando entidade EnsinoPrograma com currículo
 
