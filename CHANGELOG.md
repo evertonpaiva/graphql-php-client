@@ -2,6 +2,7 @@
 
 ### Adicionado
 - Adicionando entidade EnsinoTurma
+- Adicionando entidade EnsinoDocenteTurma
 - Adicionando propriedades período e tipo na entidade EnsinoGrade
 - Relacionando entidade EnsinoPrograma com currículo
 
