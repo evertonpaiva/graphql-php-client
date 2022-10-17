@@ -23,6 +23,8 @@ class AlunoGraphqlRequestTest extends GraphqlRequestTest
         $expected->idpessoa = 725225;
         $expected->cra = '';
         $expected->percentualconclusao = '0,00';
+        $expected->chintegralizacaocursada = 0;
+        $expected->chtotalcursada = 75;
 
         $this->assertEquals($expected, $aluno);
     }

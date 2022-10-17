@@ -5,6 +5,7 @@
 - Adicionando entidade EnsinoDocenteTurma
 - Adicionando propriedades período e tipo na entidade EnsinoGrade
 - Relacionando entidade EnsinoPrograma com currículo
+- Adicionando propriedades chintegralizacaocursada e chtotalcursada na entidade EnsinoAluno
 
 ## [0.0.17] - 2022-10-07
 
