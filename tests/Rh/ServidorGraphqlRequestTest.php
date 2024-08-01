@@ -20,7 +20,7 @@ class ServidorGraphqlRequestTest extends GraphqlRequestTest
         $expected->idfuncionario = '016702747';
         $expected->idvinculo = '1670274';
         $expected->idpessoa = 656582;
-        $expected->idsetor = 1430;
+        $expected->idsetor = 8313;
         $expected->cargo = 'ANALISTA DE TEC DA INFORMAÇÃO ';
         $expected->situacao = 'ATIVO PERMANENTE';
 

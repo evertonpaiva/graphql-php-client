@@ -21,7 +21,7 @@ class SetorGraphqlRequestTest extends GraphqlRequestTest
 
         $expected = new stdClass;
         $expected->idsetor = 11;
-        $expected->siglasetor = 'FCBS';
+        $expected->siglasetor = 'FCBS-UFVJM';
         $expected->dataini = '2008-01-01';
         $expected->nomesetor = 'FACULDADE DE CIÊNCIAS BIOLÓGICAS E DA SAÚDE';
         $expected->tiposetor = 'UNIDADE ACAD';
