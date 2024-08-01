@@ -37,4 +37,21 @@ class CurriculoGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsArray($curriculos->edges);
         $this->assertIsObject($curriculos->pageInfo);
     }
+
+    public function testCurriculoQueryListAddRelations()
+    {
+        // Carrega a classe de curriculo
+        $curriculoGraphqlRequest = new CurriculoGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(3);
+        $curriculos =
+            $curriculoGraphqlRequest
+                ->addRelationCurso()
+                ->queryList($pagination)
+                ->getResults();
+
+        $this->assertIsArray($curriculos->edges);
+        $this->assertIsObject($curriculos->pageInfo);
+        $this->assertIsObject($curriculos->edges[0]->node->objCurso);
+    }
 }

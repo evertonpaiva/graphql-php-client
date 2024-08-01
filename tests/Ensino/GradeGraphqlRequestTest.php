@@ -21,7 +21,8 @@ class GradeGraphqlRequestTest extends GraphqlRequestTest
         $expected->curso = 'SIN';
         $expected->curriculo = '20071';
         $expected->disciplina = 'MAT001';
-        $expected->periodo = '1';
+        $expected->periodo = 1;
+        $expected->tipo = 'OBRIGATÓRIA';
 
         $this->assertEquals($expected, $aluno);
     }
