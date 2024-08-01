@@ -66,7 +66,7 @@ class TurmaGraphqlRequest extends GraphqlRequest
      * @param null $semestre semestre da turma
      * @return ProgramaGraphqlRequest
      */
-    public function queryList(PaginationQuery $pagination, $disciplina = null, $turma = null, $ano = null, $semestre = null)
+    public function queryList(PaginationQuery $pagination, $disciplina = null, $turma = null, $ano = null, $sem = null)
     {
         $this->clearQueryObjects();
         $this->queryName = 'ensinoTurmas';
@@ -90,9 +90,9 @@ class TurmaGraphqlRequest extends GraphqlRequest
             $this->arguments['ano'] = '$ano';
         }
 
-        if (!is_null($semestre)) {
+        if (!is_null($sem)) {
             $this->variablesNames[] = new Variable('semestre', 'String', false);
-            $this->variablesValues['semestre'] = $semestre;
+            $this->variablesValues['semestre'] = $sem;
             $this->arguments['semestre'] = '$semestre';
         }
 
