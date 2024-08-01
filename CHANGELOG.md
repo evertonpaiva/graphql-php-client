@@ -1,3 +1,8 @@
+## [0.0.19] - 2024-08-01
+
+### Corrigido
+- Corrigido sintaxe para ficar compatível com PHP 8.2
+
 ## [0.0.18] - 2022-10-11
 
 ### Adicionado
