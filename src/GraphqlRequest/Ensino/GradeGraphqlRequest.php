@@ -25,6 +25,7 @@ class GradeGraphqlRequest extends GraphqlRequest
             'curriculo',
             'disciplina',
             'periodo',
+            'tipo',
         ];
 
         $authType = AuthType::APP_USER_AUTH;

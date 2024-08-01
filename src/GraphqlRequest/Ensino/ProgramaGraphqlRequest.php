@@ -78,4 +78,19 @@ class ProgramaGraphqlRequest extends GraphqlRequest
 
         return $this;
     }
+
+    public function addRelationCurriculo($curriculo = null, $pagination = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::SINGLE,
+                'objCurriculo',
+                CurriculoGraphqlRequest::class,
+                $curriculo,
+                $pagination
+            )
+        );
+
+        return $this;
+    }
 }

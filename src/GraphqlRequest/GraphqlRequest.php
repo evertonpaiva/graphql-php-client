@@ -157,7 +157,7 @@ class GraphqlRequest
      */
     protected function generateUserInput(String $login, String $password)
     {
-        return new RawObject("{ login: \"${login}\" password: \"${password}\" }");
+        return new RawObject("{ login: \"{$login}\" password: \"{$password}\" }");
     }
 
     /**

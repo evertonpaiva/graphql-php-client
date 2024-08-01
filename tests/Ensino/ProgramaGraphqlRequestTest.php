@@ -45,6 +45,7 @@ class ProgramaGraphqlRequestTest extends GraphqlRequestTest
         $programas =
             $programaGraphqlRequest
                 ->addRelationCurso()
+                ->addRelationCurriculo()
                 ->queryList($pagination)
                 ->getResults();
 

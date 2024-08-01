@@ -27,7 +27,9 @@ class AlunoGraphqlRequest extends GraphqlRequest
             'semingresso',
             'idpessoa',
             'cra',
-            'percentualconclusao'
+            'percentualconclusao',
+            'chintegralizacaocursada',
+            'chtotalcursada'
         ];
 
         $authType = AuthType::APP_USER_AUTH;
