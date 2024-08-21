@@ -48,14 +48,19 @@ class TurmaGraphqlRequestTest extends GraphqlRequestTest
         $pagination = new ForwardPaginationQuery(3);
         $disciplina = 'COM001';
         $turma = 'S';
-        $ano = '2020';
+        $ano = '2024';
         $semestre = '2';
         $turmas = $turmaGraphqlRequest
-            ->queryList($pagination, $disciplina, $turma, $ano, $semestre)
+            ->addRelationDocentes()
+            ->addRelationMatriculas()
             ->addRelationDisciplina()
+            ->queryList($pagination, $disciplina, $turma, $ano, $semestre)
             ->getResults();
 
         $this->assertIsArray($turmas->edges);
         $this->assertIsObject($turmas->pageInfo);
+        $this->assertIsObject($turmas->edges[0]->node->objDisciplina);
+        $this->assertIsArray($turmas->edges[0]->node->docentes->edges);
+        $this->assertIsArray($turmas->edges[0]->node->matriculas->edges);
     }
 }
