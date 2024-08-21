@@ -64,7 +64,7 @@ class TurmaGraphqlRequest extends GraphqlRequest
      * @param null $turma letra de identificação da turma
      * @param null $ano ano da turma
      * @param null $semestre semestre da turma
-     * @return ProgramaGraphqlRequest
+     * @return TurmaGraphqlRequest
      */
     public function queryList(PaginationQuery $pagination, $disciplina = null, $turma = null, $ano = null, $sem = null)
     {

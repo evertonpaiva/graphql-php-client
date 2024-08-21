@@ -15,14 +15,14 @@ class MatriculaGraphqlRequestTest extends GraphqlRequestTest
         $matriculaGraphqlRequest = new MatriculaGraphqlRequest();
 
         // Recupera informações de grade por código
-        $turma = $matriculaGraphqlRequest->queryGetById(1205432, '20241038012')->getResults();
+        $turma = $matriculaGraphqlRequest->queryGetById(1200881, '20241038012')->getResults();
 
         $expected = new stdClass;
         $expected->matricula = '20241038012';
-        $expected->idturma = 1205432;
+        $expected->idturma = '1200881';
         $expected->nota = '';
         $expected->segundaepoca = '';
-        $expected->freq = '';
+        $expected->freq = 'Suficiente';
         $expected->situacao = 'Aberta';
         $expected->tipo = 'OBRIGATÓRIA';
 

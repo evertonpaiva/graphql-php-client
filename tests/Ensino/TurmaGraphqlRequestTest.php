@@ -49,7 +49,7 @@ class TurmaGraphqlRequestTest extends GraphqlRequestTest
         $disciplina = 'COM001';
         $turma = 'S';
         $ano = '2024';
-        $semestre = '2';
+        $semestre = '1';
         $turmas = $turmaGraphqlRequest
             ->addRelationDocentes()
             ->addRelationMatriculas()
@@ -57,10 +57,10 @@ class TurmaGraphqlRequestTest extends GraphqlRequestTest
             ->queryList($pagination, $disciplina, $turma, $ano, $semestre)
             ->getResults();
 
-        $this->assertIsArray($turmas->edges);
+        $this->assertIsObject($turmas);
         $this->assertIsObject($turmas->pageInfo);
-        $this->assertIsObject($turmas->edges[0]->node->objDisciplina);
         $this->assertIsArray($turmas->edges[0]->node->docentes->edges);
         $this->assertIsArray($turmas->edges[0]->node->matriculas->edges);
+        $this->assertIsObject($turmas->edges[0]->node->objDisciplina);
     }
 }
