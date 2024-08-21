@@ -113,4 +113,36 @@ class TurmaGraphqlRequest extends GraphqlRequest
 
         return $this;
     }
+
+    public function addRelationDocentes($pagination = null, $filters = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'docentes',
+                DocenteTurmaGraphqlRequest::class,
+                null,
+                $pagination,
+                $filters
+            )
+        );
+
+        return $this;
+    }
+
+    public function addRelationMatriculas($pagination = null, $filters = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'matriculas',
+                MatriculaGraphqlRequest::class,
+                null,
+                $pagination,
+                $filters
+            )
+        );
+
+        return $this;
+    }
 }
