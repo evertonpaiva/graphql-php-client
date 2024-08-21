@@ -47,11 +47,13 @@ class DocenteGraphqlRequestTest extends GraphqlRequestTest
         $docentes =
             $docenteGraphqlRequest
                 ->addRelationDepartamento()
+                ->addRelationTurmas()
                 ->queryList($pagination)
                 ->getResults();
 
         $this->assertIsArray($docentes->edges);
         $this->assertIsObject($docentes->pageInfo);
         $this->assertIsObject($docentes->edges[0]->node->objDepartamento);
+        $this->assertIsObject($docentes->edges[0]->node->turmas);
     }
 }

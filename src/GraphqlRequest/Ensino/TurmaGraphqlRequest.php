@@ -64,7 +64,7 @@ class TurmaGraphqlRequest extends GraphqlRequest
      * @param null $turma letra de identificação da turma
      * @param null $ano ano da turma
      * @param null $semestre semestre da turma
-     * @return ProgramaGraphqlRequest
+     * @return TurmaGraphqlRequest
      */
     public function queryList(PaginationQuery $pagination, $disciplina = null, $turma = null, $ano = null, $sem = null)
     {
@@ -108,6 +108,38 @@ class TurmaGraphqlRequest extends GraphqlRequest
                 DisciplinaGraphqlRequest::class,
                 $disciplina,
                 $pagination
+            )
+        );
+
+        return $this;
+    }
+
+    public function addRelationDocentes($pagination = null, $filters = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'docentes',
+                DocenteTurmaGraphqlRequest::class,
+                null,
+                $pagination,
+                $filters
+            )
+        );
+
+        return $this;
+    }
+
+    public function addRelationMatriculas($pagination = null, $filters = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'matriculas',
+                MatriculaGraphqlRequest::class,
+                null,
+                $pagination,
+                $filters
             )
         );
 
