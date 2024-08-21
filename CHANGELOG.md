@@ -1,3 +1,10 @@
+## [0.0.20] - 2024-08-21
+
+### Adicionado
+- Adicionando entidade EnsinoMatricula
+- Adicionado relacionamento de EnsinoDocente com EnsinoDocenteTurma
+- Adicionado relacionamento de EnsinoTurma com docentes e matriculas
+
 ## [0.0.19] - 2024-08-01
 
 ### Corrigido
