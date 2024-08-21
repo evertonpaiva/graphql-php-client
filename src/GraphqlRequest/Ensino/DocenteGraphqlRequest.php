@@ -7,6 +7,7 @@ use GraphqlClient\GraphqlQuery\RelationQuery;
 use GraphqlClient\GraphqlQuery\RelationType;
 use GraphqlClient\GraphqlRequest\AuthType;
 use GraphqlClient\GraphqlRequest\Ensino\DepartamentoGraphqlRequest;
+use GraphqlClient\GraphqlRequest\Ensino\DocenteTurmaGraphqlRequest;
 use GraphqlClient\GraphqlRequest\GraphqlRequest;
 use GraphqlClient\GraphqlQuery\PaginationQuery;
 
@@ -76,6 +77,22 @@ class DocenteGraphqlRequest extends GraphqlRequest
                 DepartamentoGraphqlRequest::class,
                 $departamento,
                 $pagination
+            )
+        );
+
+        return $this;
+    }
+
+    public function addRelationTurmas($turma = null, $pagination = null, $filters = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'turmas',
+                DocenteTurmaGraphqlRequest::class,
+                $turma,
+                $pagination,
+                $filters
             )
         );
 
