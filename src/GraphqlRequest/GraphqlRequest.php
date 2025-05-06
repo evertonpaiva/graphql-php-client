@@ -501,7 +501,7 @@ QUERY;
                 $pagination = new ForwardPaginationQuery();
                 $relation->setPagination($pagination);
             } else {
-                if (!$paginationInstance instanceof ForwardPaginationQuery ||
+                if (!$paginationInstance instanceof ForwardPaginationQuery &&
                     !$paginationInstance instanceof BackwardPaginationQuery
                 ) {
                     throw new WrongInstancePaginationException($className, $relation->getRelationName());
