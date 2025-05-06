@@ -1,3 +1,8 @@
+## [0.0.21] - 2025-05-06
+
+### Corrigido
+- Corrigindo erro lógico na classe GraphqlRequest, função addRelation.
+
 ## [0.0.20] - 2024-08-21
 
 ### Adicionado
