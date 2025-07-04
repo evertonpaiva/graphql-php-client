@@ -11,9 +11,9 @@ namespace GraphqlClient\GraphqlQuery;
 class ForwardPaginationQuery extends PaginationQuery
 {
 
-    public function __construct(int $first = 10, String $after = null)
+    public function __construct(int $first = null, String $after = null)
     {
-        parent::__construct($first, $after);
+        parent::__construct($first ?? 10, $after);
     }
 
     /**

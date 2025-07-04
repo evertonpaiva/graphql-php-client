@@ -1,3 +1,8 @@
+## [0.0.22] - 2025-07-04
+
+### Corrigido
+- Corrigindo erro lógico na classe ForwardPaginationQyery e BackwardPaginationQuery, no construtor.
+
 ## [0.0.21] - 2025-05-06
 
 ### Corrigido

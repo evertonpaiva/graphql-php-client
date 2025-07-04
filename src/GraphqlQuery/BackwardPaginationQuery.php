@@ -11,9 +11,9 @@ namespace GraphqlClient\GraphqlQuery;
 class BackwardPaginationQuery extends PaginationQuery
 {
 
-    public function __construct(int $last = 10, String $before = null)
+    public function __construct(int $last = null, String $before = null)
     {
-        parent::__construct($last, $before);
+        parent::__construct($last ?? 10, $before);
     }
 
     /**
