@@ -145,4 +145,20 @@ class TurmaGraphqlRequest extends GraphqlRequest
 
         return $this;
     }
+
+    public function addRelationHistoricos($pagination = null, $filters = null)
+    {
+        $this->addRelation(
+            new RelationQuery(
+                RelationType::PAGINATED,
+                'historicos',
+                HistoricoGraphqlRequest::class,
+                null,
+                $pagination,
+                $filters
+            )
+        );
+
+        return $this;
+    }
 }
