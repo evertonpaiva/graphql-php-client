@@ -24,7 +24,7 @@
         "firebase/php-jwt": "^5.0"
     },
     "require-dev": {
-        "phpmd/phpmd" : "@stable",
+        "phpmd/phpmd": "@stable",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.0"
     },
@@ -38,7 +38,7 @@
             "GraphqlClient\\Tests\\": "tests/"
         }
     },
-    "version": "0.0.22",
+    "version": "0.0.23",
     "config": {
         "audit": {
             "block-insecure": false,
