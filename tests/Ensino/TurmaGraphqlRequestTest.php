@@ -63,4 +63,24 @@ class TurmaGraphqlRequestTest extends GraphqlRequestTest
         $this->assertIsArray($turmas->edges[0]->node->matriculas->edges);
         $this->assertIsObject($turmas->edges[0]->node->objDisciplina);
     }
+
+    public function testTurmaQueryListWithHistoricos()
+    {
+        // Carrega a classe de turma
+        $turmaGraphqlRequest = new TurmaGraphqlRequest();
+
+        $pagination = new ForwardPaginationQuery(3);
+        $disciplina = 'COM001';
+        $turma = 'S';
+        $ano = '2024';
+        $semestre = '1';
+        $turmas = $turmaGraphqlRequest
+            ->addRelationHistoricos()
+            ->queryList($pagination, $disciplina, $turma, $ano, $semestre)
+            ->getResults();
+
+        $this->assertIsObject($turmas);
+        $this->assertIsObject($turmas->pageInfo);
+        $this->assertIsArray($turmas->edges[0]->node->historicos->edges);
+    }
 }

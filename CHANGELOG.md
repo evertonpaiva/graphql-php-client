@@ -1,3 +1,9 @@
+## [0.0.23] - 2026-10-03
+
+### Adicionado
+- Adicionando entidade EnsinoHistorico
+- Adicionando relacionamento EnsinoTurma com EnsinoHistorico
+
 ## [0.0.22] - 2025-07-04
 
 ### Corrigido

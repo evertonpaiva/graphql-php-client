@@ -5,7 +5,7 @@ set -e
 COMPOSER_IMG=graphql-client:dev
 
 echo -e "\nParando a stack"
-docker-compose down
+docker compose down
 
 echo -e "\nInstalando dependências localmente"
 docker run --rm --interactive --tty \
@@ -16,4 +16,4 @@ echo -e "\nCorrigindo permissões na pasta da aplicação"
 sudo chown "$USER":www-data -R .
 
 echo -e "\nIniciando o container"
-docker-compose up -d
+docker compose up -d
