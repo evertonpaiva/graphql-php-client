@@ -3,4 +3,4 @@
 set -e
 
 echo -e "\nParando a stack"
-docker-compose down
+docker compose down
