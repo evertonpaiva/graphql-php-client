@@ -3,6 +3,7 @@
 namespace GraphqlClient\Jwt;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use GraphqlClient\Exception\ExpiredTokenException;
 use DateTime;
 
@@ -167,7 +168,11 @@ EOD;
         // Permitir 10 segundos de tolerância entre a hora do servidor que gera o token
         // este servidor web que valida o token.
         JWT::$leeway = 10;
-        $decoded = JWT::decode($this->jwt, $pubKey, array('RS256'));
+        if (class_exists(Key::class)) {
+            $decoded = JWT::decode($this->jwt, new Key($pubKey, 'RS256'));
+        } else {
+            $decoded = JWT::decode($this->jwt, $pubKey, array('RS256'));
+        }
 
         $decoded->expiraEm = new DateTime("@$decoded->exp");
         $this->checkTokenExpirado($decoded);
