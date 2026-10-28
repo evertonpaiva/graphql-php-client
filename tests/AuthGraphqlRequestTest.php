@@ -98,4 +98,44 @@ class AuthGraphqlRequestTest extends GraphqlRequestTest
 
         $this->assertEquals($userInfo->nome, 'ADMINISTRADOR DO SISTEMA');
     }
+
+    /**
+     * Testa sobrescrita das URLs através de variáveis de ambiente
+     */
+    public function testEnvUrlOverrides()
+    {
+        putenv('GRAPHQL_URL_TESTE=https://custom-test.example.com/');
+        putenv('GRAPHQL_URL_PROD=https://custom-prod.example.com/');
+
+        $authGraphqlRequest = new AuthGraphqlRequest();
+        $reflection = new \ReflectionClass(\GraphqlClient\GraphqlRequest\GraphqlRequest::class);
+        $prop = $reflection->getProperty('graphqlUrlArray');
+        $prop->setAccessible(true);
+        $urls = $prop->getValue($authGraphqlRequest);
+
+        $this->assertEquals('https://custom-test.example.com/', $urls['teste']);
+        $this->assertEquals('https://custom-prod.example.com/', $urls['prod']);
+
+        putenv('GRAPHQL_URL_TESTE');
+        putenv('GRAPHQL_URL_PROD');
+    }
+
+    /**
+     * Testa sobrescrita da URL de teste usando GRAPHQL_URL_TEST
+     */
+    public function testEnvUrlTestFallback()
+    {
+        putenv('GRAPHQL_URL_TESTE');
+        putenv('GRAPHQL_URL_TEST=https://fallback-test.example.com/');
+
+        $authGraphqlRequest = new AuthGraphqlRequest();
+        $reflection = new \ReflectionClass(\GraphqlClient\GraphqlRequest\GraphqlRequest::class);
+        $prop = $reflection->getProperty('graphqlUrlArray');
+        $prop->setAccessible(true);
+        $urls = $prop->getValue($authGraphqlRequest);
+
+        $this->assertEquals('https://fallback-test.example.com/', $urls['teste']);
+
+        putenv('GRAPHQL_URL_TEST');
+    }
 }

@@ -149,7 +149,7 @@ EOD;
         $this->pubKeyArray['prod']['Authorization'] = self::AUTENTICACAO_PUB_KEY_PROD;
 
         $this->pubKeyArray['local']['Application'] = self::AUTORIZACAO_PUB_KEY_LOCAL;
-        $this->pubKeyArray['local']['Authorization'] = self::AUTENTICACAO_PUB_KEY_TESTE;
+        $this->pubKeyArray['local']['Authorization'] = self::AUTORIZACAO_PUB_KEY_LOCAL;
 
         $this->env = $env;
         $this->type = $type;
