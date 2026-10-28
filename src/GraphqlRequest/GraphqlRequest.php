@@ -130,9 +130,10 @@ class GraphqlRequest
         $this->variablesValues = [];
         $this->relations = [];
 
-        $this->graphqlUrlArray['local'] = ConfigRequest::GRAPHQL_URL_LOCAL;
-        $this->graphqlUrlArray['teste'] = ConfigRequest::GRAPHQL_URL_TESTE;
-        $this->graphqlUrlArray['prod'] =  ConfigRequest::GRAPHQL_URL_PROD;
+        $this->graphqlUrlArray['local'] = getenv('GRAPHQL_URL_LOCAL') ?: ConfigRequest::GRAPHQL_URL_LOCAL;
+        $urlTeste = getenv('GRAPHQL_URL_TESTE') ?: getenv('GRAPHQL_URL_TEST');
+        $this->graphqlUrlArray['teste'] = $urlTeste ?: ConfigRequest::GRAPHQL_URL_TESTE;
+        $this->graphqlUrlArray['prod'] = getenv('GRAPHQL_URL_PROD') ?: ConfigRequest::GRAPHQL_URL_PROD;
 
         // Carrega as variáveis de ambiente
         $this->loadEnvVars();

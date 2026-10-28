@@ -23,7 +23,7 @@ class MatriculaGraphqlRequestTest extends GraphqlRequestTest
         $expected->nota = '';
         $expected->segundaepoca = '';
         $expected->freq = '';
-        $expected->situacao = 'Aberta';
+        $expected->situacao = 'Matriculado';
         $expected->tipo = 'OBRIGATÓRIA';
 
         $this->assertEquals($expected, $turma);
