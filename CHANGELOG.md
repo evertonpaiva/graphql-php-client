@@ -1,3 +1,8 @@
+## [0.0.24] - 2026-10-28
+
+### Corrigido
+- Corrigindo JWT Decoder, adicionando a constante de chave pública de autorização
+
 ## [0.0.23] - 2026-10-03
 
 ### Adicionado
