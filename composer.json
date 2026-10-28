@@ -21,7 +21,7 @@
     "require": {
         "php": "^7.1 || ^8.0",
         "gmostafa/php-graphql-client": "^1.13",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^7.0"
     },
     "require-dev": {
         "phpmd/phpmd": "@stable",
@@ -38,14 +38,5 @@
             "GraphqlClient\\Tests\\": "tests/"
         }
     },
-    "version": "0.0.24",
-    "config": {
-        "audit": {
-            "block-insecure": false,
-            "ignore": [
-                "PKSA-y2cr-5h3j-g3ys",
-                "PKSA-2kqm-ps5x-s4f5"
-            ]
-        }
-    }
+    "version": "0.0.25"
 }
