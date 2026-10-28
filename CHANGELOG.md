@@ -1,3 +1,8 @@
+## [0.0.25] - 2026-10-28
+
+### Atualizado
+- Atualizando JWT para versão 7.
+
 ## [0.0.24] - 2026-10-28
 
 ### Corrigido
